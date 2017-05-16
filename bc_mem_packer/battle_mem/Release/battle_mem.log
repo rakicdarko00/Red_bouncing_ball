@@ -1,6 +1,8 @@
-﻿Build started 9.5.2017 11:16:24.
-     1>Project "C:\ra127-2014\lprs2\projekat\super_mario\bc_mem_packer\battle_mem\battle_mem.vcxproj" on node 2 (build target(s)).
-     1>InitializeBuildStatus:
+﻿Build started 16.5.2017 11:45:50.
+     1>Project "C:\ra127-2014\lprs2\projekat\super_mario\bc_mem_packer\battle_mem\battle_mem.vcxproj" on node 2 (rebuild target(s)).
+     1>_PrepareForClean:
+         Deleting file "Release\battle_mem.lastbuildstate".
+       InitializeBuildStatus:
          Creating "Release\battle_mem.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Zi /nologo /W1 /WX- /O2 /Oi /Oy- /GL /D _MBCS /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt bitmap.cpp main.cpp tools.cpp
@@ -19,8 +21,8 @@
        FinalizeBuildStatus:
          Deleting file "Release\battle_mem.unsuccessfulbuild".
          Touching "Release\battle_mem.lastbuildstate".
-     1>Done Building Project "C:\ra127-2014\lprs2\projekat\super_mario\bc_mem_packer\battle_mem\battle_mem.vcxproj" (build target(s)).
+     1>Done Building Project "C:\ra127-2014\lprs2\projekat\super_mario\bc_mem_packer\battle_mem\battle_mem.vcxproj" (rebuild target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:02.62
+Time Elapsed 00:00:02.24
