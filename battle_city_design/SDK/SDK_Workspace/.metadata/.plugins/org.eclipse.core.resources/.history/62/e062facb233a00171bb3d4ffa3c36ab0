@@ -185,11 +185,10 @@ static void map_update( map_entry_t * map )
     }
 }
 
-static void map_reset( map_entry_t * map )
-{
+static void map_reset( map_entry_t * map ) {
     unsigned int i;
 
-    for( i = 0; i < MAP_WIDTH * MAP_HEIGHT; i++ ) {
+    for(i = 0; i < MAP_WIDTH * MAP_HEIGHT; i++) {
         Xil_Out32( XPAR_BATTLE_CITY_PERIPH_0_BASEADDR + 4 * ( MAP_BASE_ADDRESS + i ), ( (unsigned int)map[ i ].z << 24 ) | ( (unsigned int)map[ i ].rot << 16 ) | (unsigned int)map[ i ].ptr );
     }
 
@@ -475,7 +474,6 @@ void battle_city( void )
 	int i,change = 0;
 
 	map_reset( map1 );
-
 
 	chhar_spawn(&coin1);
 	chhar_spawn(&coin2);
