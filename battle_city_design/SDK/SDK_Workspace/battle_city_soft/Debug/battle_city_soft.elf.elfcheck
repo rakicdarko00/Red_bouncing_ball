@@ -6,6 +6,4 @@ Command Line: elfcheck -hw ../../battle_city_design_hw_platform/system.xml -pe
 microblaze_0 battle_city_soft.elf 
 
 ELF file	: battle_city_soft.elf
-ERROR:EDK:756 - Cannot read XML file
-   ../../battle_city_design_hw_platform/system.xml
-Error: Creating Hardware Debug Object from ../../battle_city_design_hw_platform/system.xml
+elfcheck passed.
