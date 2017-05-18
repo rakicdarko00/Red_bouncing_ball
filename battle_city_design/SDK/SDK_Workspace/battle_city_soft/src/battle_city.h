@@ -4,7 +4,7 @@
 #define BATTLE_CITY_H_
 
 #define MAP_WIDTH           80  /// 80
-#define MAP_HEIGHT          60 /// 60
+#define MAP_HEIGHT          30 /// 30
 
 #define SCREEN_WIDTH		640
 #define SCREEN_HEIGHT		480
