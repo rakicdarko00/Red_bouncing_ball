@@ -1,4 +1,3 @@
-
 #include "battle_city.h"
 #include "map.h"
 #include "xparameters.h"
@@ -12,12 +11,12 @@
 
 // ***** 16x16 IMAGES *****
 
-#define IMG_16x16_cigle			0x00FF
-#define IMG_16x16_coin			0x013F
-#define IMG_16x16_crno			0x017F
-#define IMG_16x16_enemi1		0x01BF
-#define IMG_16x16_mario			0x01FF
-#define IMG_16x16_plavacigla	0x023F
+#define IMG_16x16_cigle			0x00FF //2
+#define IMG_16x16_coin			0x013F //5
+#define IMG_16x16_crno			0x017F //0
+#define IMG_16x16_enemi1		0x01BF //4
+#define IMG_16x16_mario			0x01FF //1
+#define IMG_16x16_plavacigla	0x023F //3
 
 
 // ***** MAP *****
@@ -172,24 +171,58 @@ static void chhar_spawn( characters * chhar )
 	Xil_Out32( XPAR_BATTLE_CITY_PERIPH_0_BASEADDR + 4 * ( REGS_BASE_ADDRESS + chhar->reg_h ),  (chhar->y << 16) | chhar->x );
 }
 
-static void map_update( map_entry_t * map )
+static void map_update( unsigned char * map )
 {
     unsigned int i;
 
-    for( i = 2401; i < MAP_WIDTH * MAP_HEIGHT; i++ ) {
-        if( map[ i ].update ) {
-            map[ i ].update = 0;
-
-            Xil_Out32( XPAR_BATTLE_CITY_PERIPH_0_BASEADDR + 4 * ( MAP_BASE_ADDRESS + i ), ( (unsigned int)map[ i ].z << 24 ) | ( (unsigned int)map[ i ].rot << 16 ) | (unsigned int)map[ i ].ptr );
-        }
+    for( i = 0; i < MAP_WIDTH * MAP_HEIGHT; i++ ) {
+    	switch((unsigned int)map[i]){
+    	case 0 :
+    		Xil_Out32( XPAR_BATTLE_CITY_PERIPH_0_BASEADDR + 4 * ( MAP_BASE_ADDRESS + i ), IMG_16x16_crno);
+    		break;
+    	case 1 :
+    	    Xil_Out32( XPAR_BATTLE_CITY_PERIPH_0_BASEADDR + 4 * ( MAP_BASE_ADDRESS + i ), IMG_16x16_mario);
+    	    break;
+    	case 2 :
+    	    Xil_Out32( XPAR_BATTLE_CITY_PERIPH_0_BASEADDR + 4 * ( MAP_BASE_ADDRESS + i ), IMG_16x16_cigle);
+    	    break;
+    	case 3 :
+    	    Xil_Out32( XPAR_BATTLE_CITY_PERIPH_0_BASEADDR + 4 * ( MAP_BASE_ADDRESS + i ), IMG_16x16_plavacigla);
+    	    break;
+    	case 5 :
+    	    Xil_Out32( XPAR_BATTLE_CITY_PERIPH_0_BASEADDR + 4 * ( MAP_BASE_ADDRESS + i ), IMG_16x16_coin);
+    	    break;
+    	default :
+    		Xil_Out32( XPAR_BATTLE_CITY_PERIPH_0_BASEADDR + 4 * ( MAP_BASE_ADDRESS + i ), IMG_16x16_crno);
+    		break;
+    	}
     }
 }
 
-static void map_reset( map_entry_t * map ) {
+static void map_reset( unsigned char * map ) {
     unsigned int i;
 
     for(i = 0; i < MAP_WIDTH * MAP_HEIGHT; i++) {
-    	Xil_Out32( XPAR_BATTLE_CITY_PERIPH_0_BASEADDR + 4 * ( MAP_BASE_ADDRESS + i ), ( (unsigned int)map[ i ].z << 24 ) | ( (unsigned int)map[ i ].rot << 16 ) | (unsigned int)map[ i ].ptr );
+    	switch((unsigned int)map[i]){
+    	    	case 0 :
+    	    		Xil_Out32( XPAR_BATTLE_CITY_PERIPH_0_BASEADDR + 4 * ( MAP_BASE_ADDRESS + i ), IMG_16x16_crno);
+    	    		break;
+    	    	case 1 :
+    	    	    Xil_Out32( XPAR_BATTLE_CITY_PERIPH_0_BASEADDR + 4 * ( MAP_BASE_ADDRESS + i ), IMG_16x16_mario);
+    	    	    break;
+    	    	case 2 :
+    	    	    Xil_Out32( XPAR_BATTLE_CITY_PERIPH_0_BASEADDR + 4 * ( MAP_BASE_ADDRESS + i ), IMG_16x16_cigle);
+    	    	    break;
+    	    	case 3 :
+    	    	    Xil_Out32( XPAR_BATTLE_CITY_PERIPH_0_BASEADDR + 4 * ( MAP_BASE_ADDRESS + i ), IMG_16x16_plavacigla);
+    	    	    break;
+    	    	case 5 :
+    	    	    Xil_Out32( XPAR_BATTLE_CITY_PERIPH_0_BASEADDR + 4 * ( MAP_BASE_ADDRESS + i ), IMG_16x16_coin);
+    	    	    break;
+    	    	default :
+    	    		Xil_Out32( XPAR_BATTLE_CITY_PERIPH_0_BASEADDR + 4 * ( MAP_BASE_ADDRESS + i ), IMG_16x16_crno);
+    	    		break;
+    	    	}
     }
 
     for( i = 0; i <= 20; i += 2 ) {
@@ -197,10 +230,11 @@ static void map_reset( map_entry_t * map ) {
     }
 }
 
-static bool_t jump(map_entry_t * map, characters * tank, direction_t dir, int upOrDown ){
+static bool_t jump(unsigned char * map, characters * mario, direction_t dir, int upOrDown ){
+
 	unsigned int    x;
 	unsigned int    y;
-
+/*
 	map_entry_t *   tl;
 	map_entry_t *   tc;
 	map_entry_t *   tr;
@@ -210,42 +244,52 @@ static bool_t jump(map_entry_t * map, characters * tank, direction_t dir, int up
 	map_entry_t *   bl;
 	map_entry_t *   bc;
 	map_entry_t *   br;
+	*/
 
-	if( tank->x > (( MAP_X + MAP_W ) * 16 - 16 ) ||
-		tank->y > ( MAP_Y + MAP_H ) * 16 - 16 ) {
+    unsigned char *   mario_left;
+    unsigned char *   mario_right;
+    unsigned char *   mario_center;
+    unsigned char *   coin_left;
+    unsigned char *   coin_right;
+    unsigned char *   coin_center;
+    unsigned char *   brick_left;
+    unsigned char *   brick_right;
+    unsigned char *   brick_center;
+
+	if( mario->x > (( MAP_X + MAP_WIDTH ) * 16 - 16 ) ||
+		mario->y > ( MAP_Y + MAP_HEIGHT ) * 16 - 16 ) {
 		return b_false;
 	}
 
-	x = tank->x;
-	y = tank->y;
+	x = mario->x;
+	y = mario->y;
 
 	// Make sure that coordinates will stay within map boundaries after moving.
 	if( dir == DIR_LEFT ) {
 		if( x > MAP_X * 16 / 2){
-
 			if(upOrDown == 1){   //up left
-				x-=10;
-				y-=25;
+				x-=20;
+				y-=40;
 			}else{     //down left
-				x-=10;
-				y+=25;
+				x-=20;
+				y+=40;
 			}
 
 		}
 	} else if( dir == DIR_RIGHT ) {
-		if( x < ( (MAP_X + MAP_W ) * 16 - 16)/2 +  (( (MAP_X + MAP_W ) * 16 - 16)/2)/5 ){
+		if( x < ( (MAP_X + MAP_WIDTH ) * 16 - 16)/2 +  (( (MAP_X + MAP_WIDTH ) * 16 - 16)/2)/5 ){
 
 			if(upOrDown == 1){   //up right
-				x+=10;
-				y-=25;
+				x+=20;
+				y-=40;
 			}else{     //down right
-				x+=10;
-				y+=25;
+				x+=20;
+				y+=45;
 			}
 		}
 	}
 
-
+/*
 	tl = &map[ ( y / 16 ) * MAP_WIDTH + ( x / 16 ) ];
 	tc = &map[ ( y / 16 ) * MAP_WIDTH + ( ( x + 7 ) / 16 ) ];
 	tr = &map[ ( y / 16 ) * MAP_WIDTH + ( ( x + 15 ) / 16 ) ];
@@ -281,7 +325,7 @@ static bool_t jump(map_entry_t * map, characters * tank, direction_t dir, int up
 
 			return b_true;
 		}
-	}
+	}*/
 }
 static void coin_destroy( characters * coin,unsigned int x, unsigned int y){
 	coin->destroyed = b_true;
@@ -290,38 +334,38 @@ static void coin_destroy( characters * coin,unsigned int x, unsigned int y){
 	Xil_Out32( XPAR_BATTLE_CITY_PERIPH_0_BASEADDR + 4 * ( REGS_BASE_ADDRESS + coin->reg_h ), ( coin>y << 16 ) | coin->x );
 
 }
-static bool_t mario_move( map_entry_t * map, characters * tank, direction_t dir)
+static bool_t mario_move( unsigned char * map, characters * mario, direction_t dir)
 {
 		unsigned int    x;
 	    unsigned int    y;
 
 
-	    map_entry_t *   tl;
-	    map_entry_t *   tc;
-	    map_entry_t *   tr;
-	    map_entry_t *   cl;
-		map_entry_t *   cc;
-		map_entry_t *   cr;
-		map_entry_t *   bl;
-		map_entry_t *   bc;
-		map_entry_t *   br;
+	    unsigned char *   mario_left;
+	    unsigned char *   mario_right;
+	    unsigned char *   mario_center;
+	    unsigned char *   coin_left;
+	    unsigned char *   coin_right;
+	    unsigned char *   coin_center;
+	    unsigned char *   brick_left;
+	    unsigned char *   brick_right;
+	    unsigned char *   brick_center;
 
 
 
-	    if( tank->x > (( MAP_X + MAP_W ) * 16 - 16 ) ||
-	        tank->y > ( MAP_Y + MAP_H ) * 16 - 16 ) {
+	    if( mario->x > (( MAP_X + MAP_WIDTH ) * 16 - 16 ) ||
+	    	mario->y > ( MAP_Y + MAP_HEIGHT ) * 16 - 16 ) {
 	        return b_false;
 	    }
 
-	    x = tank->x;
-	    y = tank->y;
+	    x = mario->x;
+	    y = mario->y;
 
 	    // Make sure that coordinates will stay within map boundaries after moving.
 	    if( dir == DIR_LEFT ) {
 	        if( x > MAP_X * 16 )
 	        	x--;
 	    } else if( dir == DIR_RIGHT ) {
-	        if( x < ( MAP_X + MAP_W ) * 16 - 16 )
+	        if( x < ( MAP_X + MAP_WIDTH ) * 16 - 16 )
 	        	x++;
 	    } else if( dir == DIR_UP ) {
 	        if( y > MAP_Y * 16 )
@@ -331,42 +375,43 @@ static bool_t mario_move( map_entry_t * map, characters * tank, direction_t dir)
 	            y++;
 	    }
 
-	    if(tank->x == 454 && tank->y == 304 ){
+	    //static coins
+	    /*if(mario->x == 454 && mario->y == 304 ){
 	    	if(prvi1 = 1){
 	    		coin_destroy(&coin1,x,y);
 	    		map_update( map1 );
 	    		prvi1 = 0;
 	    	}
-	    }else if (tank->x == 469 && tank->y == 304 ){
+	    }else if (mario->x == 469 && mario->y == 304 ){
 	    	if(prvi2 == 1){
 	    		coin_destroy(&coin2,x,y);
 	    		map_update( map1 );
 	    		prvi2 = 0;
 	    	}
 
-	    }else if(tank->x == 484 && tank->y == 304 ){
+	    }else if(mario->x == 484 && mario->y == 304 ){
 	    	if(prvi3 = 1){
 	    		coin_destroy(&coin3,x,y);
 	    		map_update( map1 );
 	    		prvi3 = 0;
 	    	}
 
-	    }
+	    }*/
 
 
 
 
-	    tl = &map[ ( y / 16 ) * MAP_WIDTH + ( x / 16 ) ];
-		tc = &map[ ( y / 16 ) * MAP_WIDTH + ( ( x + 7 ) / 16 ) ];
-		tr = &map[ ( y / 16 ) * MAP_WIDTH + ( ( x + 15 ) / 16 ) ];
-		cl = &map[ ( ( y + 7 ) / 16 ) * MAP_WIDTH + ( x / 16 ) ];
-		cc = &map[ ( ( y + 7 ) / 16 ) * MAP_WIDTH + ( ( x + 7 ) / 16 ) ];
-		cr = &map[ ( ( y + 7 ) / 16 ) * MAP_WIDTH + ( ( x + 15 ) / 16 ) ];
-		bl = &map[ ( ( y + 15 ) / 16 ) * MAP_WIDTH + ( x / 16 ) ];
-		bc = &map[ ( ( y + 15 ) / 16 ) * MAP_WIDTH + ( ( x + 7 ) / 16 ) ];
-		br = &map[ ( ( y + 15 ) / 16 ) * MAP_WIDTH + ( ( x + 15 ) / 16 ) ];
+	    mario_left = &map[ ( y / 16 ) * MAP_WIDTH + ( x / 16 ) ];
+	    mario_center = &map[ ( y / 16 ) * MAP_WIDTH + ( ( x + 7 ) / 16 ) ];
+	    mario_right = &map[ ( y / 16 ) * MAP_WIDTH + ( ( x + 15 ) / 16 ) ];
+		/*coin_left = &map[ ( ( y + 7 ) / 16 ) * MAP_WIDTH + ( x / 16 ) ];
+		coin_center = &map[ ( ( y + 7 ) / 16 ) * MAP_WIDTH + ( ( x + 7 ) / 16 ) ];
+		coin_right = &map[ ( ( y + 7 ) / 16 ) * MAP_WIDTH + ( ( x + 15 ) / 16 ) ];
+		brick_left = &map[ ( ( y + 15 ) / 16 ) * MAP_WIDTH + ( x / 16 ) ];
+		brick_center = &map[ ( ( y + 15 ) / 16 ) * MAP_WIDTH + ( ( x + 7 ) / 16 ) ];
+		brick_right = &map[ ( ( y + 15 ) / 16 ) * MAP_WIDTH + ( ( x + 15 ) / 16 ) ];*/
 
-	    if( tank->x != x || tank->y != y ) {
+	    /*if( mario->x != x || mario->y != y ) {
 	        // Tank can move if water, iron or brick wall isn't ahead.
 	        if( tl->ptr != IMG_16x16_plavacigla && tl->ptr != IMG_16x16_cigle && tl->ptr != IMG_16x16_enemi1 &&
 				tc->ptr != IMG_16x16_plavacigla && tc->ptr != IMG_16x16_cigle && tc->ptr != IMG_16x16_enemi1 &&
@@ -406,10 +451,10 @@ static bool_t mario_move( map_entry_t * map, characters * tank, direction_t dir)
 
 	        		 return b_true;
 
-	        }*/
+	        }
 
 
-	    }
+	    }*/
 
 	return b_false;
 }
@@ -445,7 +490,7 @@ static void process_ai( characters * tank, unsigned int * ai_dir )
 
 	if( *ai_dir == DIR_RIGHT ) {
 		while( tank->x / 8 + i < (MAP_X + MAP_W)/2 ) {
-			if( map1[ ( tank->y / 8 + i ) * MAP_WIDTH + tank->x / 12 ].ptr == IMG_16x16_enemi1)
+			if( map1[ ( tank->y / 8 + i ) * MAP_WIDTH + tank->x / 12 ] == IMG_16x16_enemi1)
 				{
 					break;
 				}
@@ -454,7 +499,7 @@ static void process_ai( characters * tank, unsigned int * ai_dir )
 
 	} else if( *ai_dir == DIR_LEFT ) {
 		while( tank->x / 8 + i < (MAP_X + MAP_W)/2 ) {
-			if( map1[ ( tank->y / 8 + i ) * MAP_WIDTH + tank->x / 8 ].ptr == IMG_16x16_enemi1)
+			if( map1[ ( tank->y / 8 + i ) * MAP_WIDTH + tank->x / 8 ] == IMG_16x16_enemi1)
 			{
 		      break;
 		    }
@@ -517,9 +562,6 @@ void battle_city( void )
 
 		process_ai( &enemie, DIR_LEFT );
 		for(i = 0; i < 300000; i++){}
-
-
-        //map_reset(map1);
 
         map_update( map1 );
 

@@ -1,4 +1,3 @@
-
 #include "tools.h"
 #include "bitmap.h"
 
@@ -10,7 +9,7 @@ void colors_to_mem( FILE * f, unsigned long addr )
 {
     unsigned int i;
 
-    for( i = 0; i < 256; i++ ) {
+    for( i = 0; i < 255; i++ ) {
         fprintf( f, "\t\t%lu =>\tx\"", addr );
 
         if( i < num_colors ) {
@@ -166,28 +165,28 @@ void create_test_map( )
     while( ( tmp = fgetc( f ) ) != EOF ) {
         if( tmp >= '0' && tmp <= '9' ) {
             map[ x ].rot = 0;
-
+			
             if( tmp == '0' ) {
                 map[ x ].z = 0;
                 map[ x++ ].ptr = 0x017F; // crno
             } else if( tmp == '1' ) {
-                map[ x ].z = 0;
-                map[ x++ ].ptr = 0x01FF; // mario
+                map[ x ].z = 1;
+				map[ x++ ].ptr = 0x01FF; // mario
             } else if( tmp == '2' ) {
-                map[ x ].z = 0;
-                map[ x++ ].ptr = 0x00FF; // cigla
+                map[ x ].z = 2; 
+				map[ x++ ].ptr = 0x00FF; // cigla
             } else if( tmp == '3' ) {
-                map[ x ].z = 1;
-                map[ x++ ].ptr = 0x023F; // plava cigla
+                map[ x ].z = 3;
+				map[ x++ ].ptr = 0x023F; // plava cigla
             } else if( tmp == '4' ) {
-                map[ x ].z = 2;
-                map[ x++ ].ptr = 0x01BF; // enemi
+                map[ x ].z = 4; 
+				map[ x++ ].ptr = 0x01BF; // enemi
             } else if( tmp == '5' ) {
-                map[ x ].z = 1;
-                map[ x++ ].ptr = 0x013F; // coin
+                map[ x ].z = 5;
+				map[ x++ ].ptr = 0x013F; // coin
 			}else{
 				 map[ x ].z = 0;
-                 map[ x++ ].ptr = 0x0000; // null
+				 map[ x++ ].ptr = 0x0000; // null
 			}
         }
     }
@@ -197,31 +196,37 @@ void create_test_map( )
 
 void map_to_mem( FILE * mem_file, FILE * def_file, FILE * hdr_file, unsigned long * base_addr )
 {
-    unsigned int i;
+    unsigned int i, j;
 
     fprintf( def_file, "#define MAP_BASE_ADDRESS\t\t\t0x%.4X", *base_addr );
-
-    fprintf( hdr_file, "map_entry_t map1[ 4800 ] = {\n" );
+	fprintf( hdr_file, "#ifndef _MAP_H_\n", *base_addr );
+	fprintf( hdr_file, "#define _MAP_H_\n\n", *base_addr );
 
     for( i = 0; i < NUM_MAP_ENTRIES; i++ ) {
-        fprintf( mem_file, "\t\t%lu =>\tx\"%.2X%.2X%.4X\", -- z: %d rot: %d ptr: %d\n", *base_addr,
+
+        fprintf( hdr_file, "unsigned char  map1[2400] = {\n" );
+
+		j = 0;
+		for( i = 0; i < NUM_MAP_ENTRIES; i++ ) {
+			fprintf( mem_file, "\t\t%lu =>\tx\"%.2X%.2X%.4X\", -- z: %d rot: %d ptr: %d\n", *base_addr,
                                                                                          map[ i ].z,
                                                                                          map[ i ].rot,
                                                                                          map[ i ].ptr,
                                                                                          map[ i ].z,
                                                                                          map[ i ].rot,
                                                                                          map[ i ].ptr );
+			fprintf( hdr_file, ( i == NUM_MAP_ENTRIES - 1 ) ? "%d, "
+															: "%d, ", map[ i ].z);
+			if(j == 80)
+			{
+				fprintf( hdr_file, "\n");
+				j = 0;
+			}
 
-        fprintf( hdr_file, ( i == NUM_MAP_ENTRIES - 1 ) ? "    { %u, %u, 0x%.4X, 0 }  // x: %u y: %u\n"
-                                                        : "    { %u, %u, 0x%.4X, 0 }, // x: %u y: %u\n",
-                            map[ i ].z,
-                            map[ i ].rot,
-                            map[ i ].ptr,
-                            i % 80,
-                            i / 80 );
+			*base_addr += 1;
+			j++;
+		}
 
-        *base_addr += 1;
-    }
-
-    fprintf( hdr_file, "};\n" );
+		fprintf( hdr_file, "};\n" );
+	}
 }

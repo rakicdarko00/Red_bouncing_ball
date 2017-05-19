@@ -3,8 +3,8 @@ Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
 --> Parameter TMPDIR set to C:\ra127-2014\lprs2\projekat\super_mario\battle_city_design\synthesis\xst_temp_dir\
 
 
-Total REAL time to Xst completion: 1.00 secs
-Total CPU time to Xst completion: 0.08 secs
+Total REAL time to Xst completion: 0.00 secs
+Total CPU time to Xst completion: 0.06 secs
  
 --> 
 TABLE OF CONTENTS
@@ -1014,11 +1014,11 @@ S_AXI_ACLK     |    7.226|         |         |         |
 
 
 Total REAL time to Xst completion: 10.00 secs
-Total CPU time to Xst completion: 9.52 secs
+Total CPU time to Xst completion: 9.61 secs
  
 --> 
 
-Total memory usage is 286544 kilobytes
+Total memory usage is 285520 kilobytes
 
 Number of errors   :    0 (   0 filtered)
 Number of warnings :  224 (   0 filtered)
