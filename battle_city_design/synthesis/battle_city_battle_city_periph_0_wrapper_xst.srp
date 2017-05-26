@@ -4,7 +4,7 @@ Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
 
 
 Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.06 secs
+Total CPU time to Xst completion: 0.07 secs
  
 --> 
 TABLE OF CONTENTS
@@ -668,6 +668,7 @@ Macro Statistics
 =========================================================================
 *                         Low Level Synthesis                           *
 =========================================================================
+WARNING:Xst:1710 - FF/Latch <battle_city_i/map_addr_r1_12> (without init value) has a constant value of 0 in block <battle_city_periph>. This FF/Latch will be trimmed during the optimization process.
 WARNING:Xst:2677 - Node <battle_city_i/registers_s_8_13> of sequential type is unconnected in block <battle_city_periph>.
 WARNING:Xst:2677 - Node <battle_city_i/registers_s_8_14> of sequential type is unconnected in block <battle_city_periph>.
 WARNING:Xst:2677 - Node <battle_city_i/registers_s_8_15> of sequential type is unconnected in block <battle_city_periph>.
@@ -707,17 +708,18 @@ WARNING:Xst:2677 - Node <pixel_y_d1_0> of sequential type is unconnected in bloc
 Optimizing unit <battle_city_battle_city_periph_0_wrapper> ...
 
 Optimizing unit <battle_city_periph> ...
+WARNING:Xst:1710 - FF/Latch <battle_city_i/map_addr_r1_11> (without init value) has a constant value of 0 in block <battle_city_periph>. This FF/Latch will be trimmed during the optimization process.
 
 Optimizing unit <vga_ctrl> ...
-WARNING:Xst:1710 - FF/Latch <battle_city_periph_0/battle_city_i/map_addr_r1_12> (without init value) has a constant value of 0 in block <battle_city_battle_city_periph_0_wrapper>. This FF/Latch will be trimmed during the optimization process.
 
 Mapping all equations...
 Building and optimizing final netlist ...
-Found area constraint ratio of 100 (+ 0) on block battle_city_battle_city_periph_0_wrapper, actual ratio is 6.
+Found area constraint ratio of 100 (+ 0) on block battle_city_battle_city_periph_0_wrapper, actual ratio is 7.
 FlipFlop battle_city_periph_0/vga_ctrl_i/pixel_x_0 has been replicated 1 time(s)
 FlipFlop battle_city_periph_0/vga_ctrl_i/pixel_x_1 has been replicated 1 time(s)
 FlipFlop battle_city_periph_0/vga_ctrl_i/pixel_x_2 has been replicated 1 time(s)
 FlipFlop battle_city_periph_0/vga_ctrl_i/pixel_x_3 has been replicated 1 time(s)
+FlipFlop battle_city_periph_0/vga_ctrl_i/pixel_x_6 has been replicated 1 time(s)
 
 Final Macro Processing ...
 
@@ -811,24 +813,24 @@ Top Level Output File Name         : battle_city_battle_city_periph_0_wrapper.ng
 
 Primitive and Black Box Usage:
 ------------------------------
-# BELS                             : 2050
+# BELS                             : 2076
 #      GND                         : 1
-#      INV                         : 12
+#      INV                         : 9
 #      LUT1                        : 142
-#      LUT2                        : 125
-#      LUT3                        : 21
-#      LUT4                        : 821
-#      LUT5                        : 60
-#      LUT6                        : 146
-#      MUXCY                       : 424
-#      MUXF7                       : 37
+#      LUT2                        : 128
+#      LUT3                        : 20
+#      LUT4                        : 840
+#      LUT5                        : 61
+#      LUT6                        : 174
+#      MUXCY                       : 413
+#      MUXF7                       : 39
 #      VCC                         : 1
-#      XORCY                       : 260
+#      XORCY                       : 248
 # FlipFlops/Latches                : 712
-#      FD                          : 142
+#      FD                          : 156
 #      FDE                         : 545
 #      FDR                         : 2
-#      FDRE                        : 23
+#      FDRE                        : 9
 # RAMS                             : 16
 #      RAMB16BWER                  : 16
 # Shift Registers                  : 53
@@ -842,17 +844,17 @@ Selected Device : 6slx45fgg676-2
 
 Slice Logic Utilization: 
  Number of Slice Registers:             712  out of  54576     1%  
- Number of Slice LUTs:                 1380  out of  27288     5%  
-    Number used as Logic:              1327  out of  27288     4%  
+ Number of Slice LUTs:                 1427  out of  27288     5%  
+    Number used as Logic:              1374  out of  27288     5%  
     Number used as Memory:               53  out of   6408     0%  
        Number used as SRL:               53
 
 Slice Logic Distribution: 
- Number of LUT Flip Flop pairs used:   1459
-   Number with an unused Flip Flop:     747  out of   1459    51%  
-   Number with an unused LUT:            79  out of   1459     5%  
-   Number of fully used LUT-FF pairs:   633  out of   1459    43%  
-   Number of unique control sets:         8
+ Number of LUT Flip Flop pairs used:   1493
+   Number with an unused Flip Flop:     781  out of   1493    52%  
+   Number with an unused LUT:            66  out of   1493     4%  
+   Number of fully used LUT-FF pairs:   646  out of   1493    43%  
+   Number of unique control sets:         7
 
 IO Utilization: 
  Number of IOs:                         181
@@ -907,7 +909,7 @@ All values displayed in nanoseconds (ns)
 =========================================================================
 Timing constraint: Default period analysis for Clock 'S_AXI_ACLK'
   Clock period: 7.226ns (frequency: 138.394MHz)
-  Total number of paths / destination ports: 25530 / 1568
+  Total number of paths / destination ports: 25587 / 1540
 -------------------------------------------------------------------------
 Delay:               7.226ns (Levels of Logic = 15)
   Source:            battle_city_periph_0/battle_city_i/registers_s_1_24 (FF)
@@ -933,7 +935,7 @@ Delay:               7.226ns (Levels of Logic = 15)
      MUXCY:DI->O           1   0.181   0.000  battle_city_periph_0/battle_city_i/Mcompar_pixel_row_i[8]_reg_end_row_s[1][8]_LessThan_58_o_cy<3> (battle_city_periph_0/battle_city_i/Mcompar_pixel_row_i[8]_reg_end_row_s[1][8]_LessThan_58_o_cy<3>)
      MUXCY:CI->O           1   0.235   0.790  battle_city_periph_0/battle_city_i/Mcompar_pixel_row_i[8]_reg_end_row_s[1][8]_LessThan_58_o_cy<4> (battle_city_periph_0/battle_city_i/pixel_row_i[8]_reg_end_row_s[1][8]_LessThan_58_o)
      LUT5:I3->O            2   0.250   1.002  battle_city_periph_0/battle_city_i/reg_intsect_s0<1>1 (battle_city_periph_0/battle_city_i/reg_intsect_s0<1>)
-     LUT4:I0->O            1   0.254   0.682  battle_city_periph_0/battle_city_i/reg_intersected_r1_0_rstpot_SW0 (N39)
+     LUT4:I0->O            1   0.254   0.682  battle_city_periph_0/battle_city_i/reg_intersected_r1_0_rstpot_SW0 (N42)
      LUT6:I5->O            1   0.254   0.000  battle_city_periph_0/battle_city_i/reg_intersected_r1_0_rstpot (battle_city_periph_0/battle_city_i/reg_intersected_r1_0_rstpot)
      FD:D                      0.074          battle_city_periph_0/battle_city_i/reg_intersected_r1_0
     ----------------------------------------
@@ -942,7 +944,7 @@ Delay:               7.226ns (Levels of Logic = 15)
 
 =========================================================================
 Timing constraint: Default OFFSET IN BEFORE for Clock 'S_AXI_ACLK'
-  Total number of paths / destination ports: 56835 / 1230
+  Total number of paths / destination ports: 56836 / 1231
 -------------------------------------------------------------------------
 Offset:              7.046ns (Levels of Logic = 3)
   Source:            S_AXI_AWADDR<31> (PAD)
@@ -1014,13 +1016,13 @@ S_AXI_ACLK     |    7.226|         |         |         |
 
 
 Total REAL time to Xst completion: 10.00 secs
-Total CPU time to Xst completion: 9.61 secs
+Total CPU time to Xst completion: 10.14 secs
  
 --> 
 
-Total memory usage is 285520 kilobytes
+Total memory usage is 285072 kilobytes
 
 Number of errors   :    0 (   0 filtered)
-Number of warnings :  224 (   0 filtered)
+Number of warnings :  225 (   0 filtered)
 Number of infos    :    2 (   0 filtered)
 

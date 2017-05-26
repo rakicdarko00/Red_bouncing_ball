@@ -62,16 +62,16 @@ architecture Behavioral of battle_city is
    -- Globals --
    signal registers_s      : registers_t :=                                -- Array representing registers 
    --   row   |    col  |en&size|  rot  | pointer
-   (( x"0130" & x"00e3" & x"8f" & x"00" & x"01FF" ),  --mario
-    ( x"0170" & x"00d5" & x"8f" & x"00" & x"01BF" ),  --enemie
-    ( x"0170" & x"011b" & x"8f" & x"00" & x"01BF" ),
-    ( x"0170" & x"014d" & x"8f" & x"00" & x"01BF" ),
-    ( x"0170" & x"01b1" & x"8f" & x"00" & x"01BF" ), 
-    ( x"0130" & x"01c6" & x"8f" & x"00" & x"013f" ),  --coin
-    ( x"0130" & x"01d5" & x"8f" & x"00" & x"013f" ),
-    ( x"0130" & x"01e4" & x"8f" & x"00" & x"013f" ),
-    ( x"0130" & x"01f3" & x"8f" & x"00" & x"013f" ),
-    ( x"0000" & x"0090" & x"7f" & x"00" & x"03d0" )); --brick
+   (( x"0130" & x"00e3" & x"7f" & x"00" & x"017F" ),  --mario
+    ( x"0170" & x"00d5" & x"7f" & x"00" & x"017F" ),  --enemie
+    ( x"0170" & x"011b" & x"7f" & x"00" & x"017F" ),
+    ( x"0170" & x"014d" & x"7f" & x"00" & x"017F" ),
+    ( x"0170" & x"01b1" & x"7f" & x"00" & x"017F" ), 
+    ( x"0130" & x"01c6" & x"7f" & x"00" & x"017F" ),  --coin
+    ( x"0130" & x"01d5" & x"7f" & x"00" & x"017F" ),
+    ( x"0130" & x"01e4" & x"7f" & x"00" & x"017F" ),
+    ( x"0130" & x"01f3" & x"7f" & x"00" & x"017F" ),
+    ( x"0000" & x"0090" & x"7f" & x"00" & x"00FF" )); --brick
     
 	signal reg_word_addr : signed(ADDR_WIDTH-1 downto 0);
 	signal reg_idx       : signed(ADDR_WIDTH-1 downto 1);
@@ -376,8 +376,8 @@ architecture Behavioral of battle_city is
                    + unsigned('0' & std_logic_vector(pixel_row_i(8 downto 3)) & "0000")
                    + pixel_col_i(9 downto 3);
 						 
-	map_index_size_16_s0  <= unsigned ("00" & std_logic_vector(pixel_row_i(8 downto 4)) & "000000") 
-                   + unsigned("00" & std_logic_vector(pixel_row_i(8 downto 4)) & "0000")
+	map_index_size_16_s0  <= unsigned ("000" & std_logic_vector(pixel_row_i(8 downto 4)) & "00000") 
+                   + unsigned("000" & std_logic_vector(pixel_row_i(8 downto 4)) & "000")
                    + pixel_col_i(9 downto 4);
 						 
 	map_index_s0 <= map_index_size_16_s0 when stat_img_size_is_16 = '1' else map_index_size_8_s0;
