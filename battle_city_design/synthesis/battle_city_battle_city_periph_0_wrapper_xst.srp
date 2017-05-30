@@ -4,7 +4,7 @@ Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
 
 
 Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.07 secs
+Total CPU time to Xst completion: 0.06 secs
  
 --> 
 TABLE OF CONTENTS
@@ -178,11 +178,9 @@ Synthesizing Unit <battle_city>.
         DATA_WIDTH = 32
         COLOR_WIDTH = 24
         ADDR_WIDTH = 13
-        REGISTER_OFFSET = 5439
         C_BASEADDR = 0
         REGISTER_NUMBER = 10
         NUM_BITS_FOR_REG_NUM = 4
-        MAP_OFFSET = 639
         OVERHEAD = 5
         SPRITE_Z = 1
 WARNING:Xst:647 - Input <rst_n_i> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
@@ -815,13 +813,13 @@ Primitive and Black Box Usage:
 ------------------------------
 # BELS                             : 2076
 #      GND                         : 1
-#      INV                         : 9
-#      LUT1                        : 142
-#      LUT2                        : 128
-#      LUT3                        : 20
+#      INV                         : 10
+#      LUT1                        : 141
+#      LUT2                        : 129
+#      LUT3                        : 19
 #      LUT4                        : 840
-#      LUT5                        : 61
-#      LUT6                        : 174
+#      LUT5                        : 60
+#      LUT6                        : 175
 #      MUXCY                       : 413
 #      MUXF7                       : 39
 #      VCC                         : 1
@@ -957,7 +955,7 @@ Offset:              7.046ns (Levels of Logic = 3)
     ----------------------------------------  ------------
      LUT6:I0->O            1   0.254   1.137  battle_city_periph_0/write_regs_en2 (battle_city_periph_0/write_regs_en2)
      LUT6:I0->O           65   0.254   1.937  battle_city_periph_0/write_regs_en4 (battle_city_periph_0/write_regs_en)
-     LUT3:I2->O          450   0.254   2.452  battle_city_periph_0/battle_city_i/bus_we_i_GND_8_o_AND_15_o3 (battle_city_periph_0/battle_city_i/bus_we_i_GND_8_o_AND_15_o)
+     LUT6:I5->O          450   0.254   2.452  battle_city_periph_0/battle_city_i/bus_we_i_GND_8_o_AND_15_o3 (battle_city_periph_0/battle_city_i/bus_we_i_GND_8_o_AND_15_o)
      FDE:CE                    0.302          battle_city_periph_0/battle_city_i/registers_s_8_0
     ----------------------------------------
     Total                      7.046ns (1.520ns logic, 5.526ns route)
@@ -1016,11 +1014,11 @@ S_AXI_ACLK     |    7.226|         |         |         |
 
 
 Total REAL time to Xst completion: 10.00 secs
-Total CPU time to Xst completion: 10.14 secs
+Total CPU time to Xst completion: 9.70 secs
  
 --> 
 
-Total memory usage is 285072 kilobytes
+Total memory usage is 286480 kilobytes
 
 Number of errors   :    0 (   0 filtered)
 Number of warnings :  225 (   0 filtered)

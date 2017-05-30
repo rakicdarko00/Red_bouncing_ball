@@ -4,7 +4,7 @@ Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
 
 
 Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.07 secs
+Total CPU time to Xst completion: 0.08 secs
  
 --> 
 TABLE OF CONTENTS
@@ -1046,13 +1046,13 @@ Primitive and Black Box Usage:
 ------------------------------
 # BELS                             : 4377
 #      GND                         : 13
-#      INV                         : 39
-#      LUT1                        : 177
-#      LUT2                        : 271
-#      LUT3                        : 381
+#      INV                         : 40
+#      LUT1                        : 176
+#      LUT2                        : 272
+#      LUT3                        : 380
 #      LUT4                        : 1105
-#      LUT5                        : 366
-#      LUT6                        : 803
+#      LUT5                        : 365
+#      LUT6                        : 804
 #      LUT6_2                      : 96
 #      MULT_AND                    : 2
 #      MUXCY                       : 443
@@ -1464,11 +1464,11 @@ debug_module/debug_module/drck_i|    2.860|    4.093|    3.740|         |
 
 
 Total REAL time to Xst completion: 12.00 secs
-Total CPU time to Xst completion: 12.40 secs
+Total CPU time to Xst completion: 12.43 secs
  
 --> 
 
-Total memory usage is 314000 kilobytes
+Total memory usage is 314064 kilobytes
 
 Number of errors   :    0 (   0 filtered)
 Number of warnings :    6 (   0 filtered)

@@ -7,11 +7,9 @@ entity battle_city is
       DATA_WIDTH           : natural := 32;
       COLOR_WIDTH          : natural := 24;
       ADDR_WIDTH           : natural := 13;
-      REGISTER_OFFSET      : natural := 5439;   -- 6960           -- Pointer to registers in memory map
       C_BASEADDR           : natural := 0;               -- Pointer to local memory in memory map
       REGISTER_NUMBER      : natural := 10;              -- Number of registers used for sprites
       NUM_BITS_FOR_REG_NUM : natural := 4;               -- Number of bits required for number of registers
-      MAP_OFFSET           : natural := 639;            -- Pointer to start of map in memory
       OVERHEAD             : natural := 5;               -- Number of overhead bits
       SPRITE_Z             : natural := 1                -- Z coordinate of sprite
 	);
@@ -32,6 +30,8 @@ entity battle_city is
 end entity battle_city;
 
 architecture Behavioral of battle_city is
+    constant MAP_OFFSET : natural := 639; -- Pointer to start of map in memory
+    constant REGISTER_OFFSET : natural := (MAP_OFFSET + 40*30); -- 5439 -- Pointer to registers in memory map
 
    component ram 	
    port
@@ -62,15 +62,15 @@ architecture Behavioral of battle_city is
    -- Globals --
    signal registers_s      : registers_t :=                                -- Array representing registers 
    --   row   |    col  |en&size|  rot  | pointer
-   (( x"0130" & x"00e3" & x"7f" & x"00" & x"017F" ),  --mario
-    ( x"0170" & x"00d5" & x"7f" & x"00" & x"017F" ),  --enemie
-    ( x"0170" & x"011b" & x"7f" & x"00" & x"017F" ),
-    ( x"0170" & x"014d" & x"7f" & x"00" & x"017F" ),
-    ( x"0170" & x"01b1" & x"7f" & x"00" & x"017F" ), 
-    ( x"0130" & x"01c6" & x"7f" & x"00" & x"017F" ),  --coin
-    ( x"0130" & x"01d5" & x"7f" & x"00" & x"017F" ),
-    ( x"0130" & x"01e4" & x"7f" & x"00" & x"017F" ),
-    ( x"0130" & x"01f3" & x"7f" & x"00" & x"017F" ),
+   (( x"0130" & x"00e3" & x"7f" & x"00" & x"01FF" ),  --mario
+    ( x"0170" & x"00d5" & x"7f" & x"00" & x"01BF" ),  --enemie
+    ( x"0170" & x"011b" & x"7f" & x"00" & x"01BF" ),
+    ( x"0170" & x"014d" & x"7f" & x"00" & x"01BF" ),
+    ( x"0170" & x"01b1" & x"7f" & x"00" & x"01BF" ), 
+    ( x"0130" & x"01c6" & x"7f" & x"00" & x"013F" ),  --coin
+    ( x"0130" & x"01d5" & x"7f" & x"00" & x"013F" ),
+    ( x"0130" & x"01e4" & x"7f" & x"00" & x"013F" ),
+    ( x"0130" & x"01f3" & x"7f" & x"00" & x"013F" ),
     ( x"0000" & x"0090" & x"7f" & x"00" & x"00FF" )); --brick
     
 	signal reg_word_addr : signed(ADDR_WIDTH-1 downto 0);

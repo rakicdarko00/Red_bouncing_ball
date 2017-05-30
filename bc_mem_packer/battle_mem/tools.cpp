@@ -202,8 +202,11 @@ void map_to_mem( FILE * mem_file, FILE * def_file, FILE * hdr_file, unsigned lon
     for( i = 0; i < NUM_MAP_ENTRIES; i++ ) {
 
 		//matrica[30][160]
+<<<<<<< HEAD
 		fprintf( hdr_file, "#ifndef _MAP_H_\n", *base_addr );
 		fprintf( hdr_file, "#define _MAP_H_\n\n", *base_addr );
+=======
+>>>>>>> fa8f9e852a9f5d2bca40f1d1746844b3ad23202c
         fprintf( hdr_file, "unsigned char  map1[30][160] = {\n" );
 
 		for( i = 0; i < NUM_MAP_ENTRIES; i++ ) {
@@ -218,11 +221,19 @@ void map_to_mem( FILE * mem_file, FILE * def_file, FILE * hdr_file, unsigned lon
 			//{40x},
 			if(j == 0)
 			{
+<<<<<<< HEAD
 				fprintf( hdr_file, "{ " );
 			}
 			fprintf( hdr_file, ( i == NUM_MAP_ENTRIES - 1 ) ? "%d, "
 															: "%d, ", map[ i ].z);
 			if(j >= 159)
+=======
+				fprintf( hdr_file, "\n{ " );
+			}
+			fprintf( hdr_file, ( i == NUM_MAP_ENTRIES - 1 ) ? "%d, "
+															: "%d, ", map[ i ].z);
+			if(j >= 79)
+>>>>>>> fa8f9e852a9f5d2bca40f1d1746844b3ad23202c
 			{
 				fprintf( hdr_file, " },\n");
 				j = 0;
