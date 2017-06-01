@@ -243,39 +243,25 @@ static bool_t jump(unsigned char * map, characters * mario, direction_t dir,
 	y = mario->y;
 
 	// Make sure that coordinates will stay within map boundaries after moving.
-	if (dir == DIR_LEFT)
-	{
-		if (x > MAP_X * 16 / 2)
-		{
-			if (upOrDown == 1)
-			{   //up left
-				x -= 20;
-				y -= 40;
-			}
-			else
-			{     //down left
-				x -= 20;
-				y += 40;
+	if (dir == DIR_LEFT) {
+		if (x > MAP_X * 16/10) {
+			if (upOrDown == 1) {   //up left
+				x -= 10;
+				y -= 65;
+			} else {     //down left
+				x -= 10;
+				y += 65;
 			}
 
 		}
 	}
-	else if (dir == DIR_RIGHT)
-	{
-		if (x
-				< ((MAP_X + MAP_WIDTH) * 16 - 16) / 2
-						+ (((MAP_X + MAP_WIDTH) * 16 - 16) / 2) / 5)
-		{
-			if (upOrDown == 1)
-			{   //up right
-				x += 5;
-				y -= 5;
-			}
-			else
-			{ //down right
-				x += 20;
-				y -= 40;
-			}
+	else if (dir == DIR_RIGHT) {
+		if (upOrDown == 1) {   //up right
+			x += 10;
+			y -= 65;
+		} else { //down right
+			x += 10;
+			y += 65;
 		}
 	}
 
@@ -296,19 +282,6 @@ static bool_t jump(unsigned char * map, characters * mario, direction_t dir,
 			(mario->y << 16) | mario->x);
 
 	return b_true;
-
-}
-
-static void coin_destroy(characters * coin, unsigned int x, unsigned int y)
-{
-	coin->destroyed = b_true;
-
-	Xil_Out32(
-			XPAR_BATTLE_CITY_PERIPH_0_BASEADDR + 4 * ( REGS_BASE_ADDRESS + coin->reg_l ),
-			(unsigned int)0x8F000000 | IMG_16x16_crno);
-	Xil_Out32(
-			XPAR_BATTLE_CITY_PERIPH_0_BASEADDR + 4 * ( REGS_BASE_ADDRESS + coin->reg_h ),
-			(coin > y << 16) | coin->x);
 
 }
 
@@ -340,26 +313,23 @@ static bool_t mario_move(unsigned char * map, characters * mario,
 	//da li je dobro prosledjeno po referenci ???
 	mario_position = obstackles_detection(&mario, 1, &map);
 
-	if (dir == DIR_LEFT)
-	{
-		if (x > 24)
+	if (dir == DIR_LEFT) {
+		if (x > MAP_X * 16) {
+			if (map[y * MAP_WIDTH + x] == 5) {
+				map[y * MAP_WIDTH + x] = 0;
+				map_reset(map);
+				map_update();
+			}
 			x--;
-		if (mario_position == 2 || mario_position == 3)
-
-		{
-			x++;
-			return b_false;
 		}
-	}
-	else if (dir == DIR_RIGHT)
-	{
-		if (x < 600)
+	} else if (dir == DIR_RIGHT) {
 			x++;
-		if (mario_position == 2 || mario_position == 3)
-		{
-			x--;
-			return b_false;
-		}
+	} else if (dir == DIR_UP) {
+		if (y > MAP_Y * 16)
+			y--;
+	} else if (dir == DIR_DOWN) {
+		if (y < (MAP_X + MAP_W) * 16 - 16)
+			y++;
 	}
 
 	mario->x = x;
@@ -369,78 +339,7 @@ static bool_t mario_move(unsigned char * map, characters * mario,
 			XPAR_BATTLE_CITY_PERIPH_0_BASEADDR + 4 * ( REGS_BASE_ADDRESS + mario->reg_h ),
 			(mario->y << 16) | mario->x);
 
-	//static coins
-	/*if(mario->x == 454 && mario->y == 304 ){
-	 if(prvi1 = 1){
-	 coin_destroy(&coin1,x,y);
-	 map_update( map1 );
-	 prvi1 = 0;
-	 }
-	 }else if (mario->x == 469 && mario->y == 304 ){
-	 if(prvi2 == 1){
-	 coin_destroy(&coin2,x,y);
-	 map_update( map1 );
-	 prvi2 = 0;
-	 }
-
-	 }else if(mario->x == 484 && mario->y == 304 ){
-	 if(prvi3 = 1){
-	 coin_destroy(&coin3,x,y);
-	 map_update( map1 );
-	 prvi3 = 0;
-	 }
-
-	 }*/
-
 	return b_false;
-}
-
-static void process_ai(characters * tank, unsigned int * ai_dir)
-{
-	/*unsigned int tmp_dir;
-	 bool_t turn;
-	 unsigned int i;
-
-	 if (turn == b_true) {
-	 do {
-
-	 tmp_dir = rand_lfsr113( ) % 2;
-	 }while( tmp_dir == *ai_dir );
-
-	 *ai_dir = tmp_dir;
-
-
-	 }else {
-	 while( mario_move( map1, &enemie1, *ai_dir ) == b_false ) {
-	 while( tmp_dir == *ai_dir ) {
-	 tmp_dir = rand_lfsr113( ) % 2;
-	 }
-
-	 *ai_dir = tmp_dir;
-	 }
-	 }
-
-	 i = 0;
-
-	 if (*ai_dir == DIR_RIGHT) {
-	 while (tank->x / 8 + i < (MAP_X + MAP_W) / 2) {
-	 if (map1[(tank->y / 8 + i) * MAP_WIDTH + tank->x / 12]
-	 == IMG_16x16_enemi1) {
-	 break;
-	 }
-	 i++;
-	 }
-
-	 } else if (*ai_dir == DIR_LEFT) {
-	 while (tank->x / 8 + i < (MAP_X + MAP_W) / 2) {
-	 if (map1[(tank->y / 8 + i) * MAP_WIDTH + tank->x / 8]
-	 == IMG_16x16_enemi1) {
-	 break;
-	 }
-	 i++;
-
-	 }
-	 }*/
 }
 
 int obstackles_detection(characters * mario, int deoMape, unsigned char * map)
@@ -501,18 +400,28 @@ void battle_city(void)
 		if (BTN_LEFT(buttons))
 		{
 			mario_move(map1, &mario, DIR_LEFT);
+			tmpBtn = 1;
+			tmpUp = 0;
 		}
 		else if (BTN_RIGHT(buttons))
 		{
 			mario_move(map1, &mario, DIR_RIGHT);
+			tmpBtn = 0;
+			tmpUp = 0;
 		}
-		else if (BTN_UP (buttons) && jumpFlag == 0)
+		else if (BTN_UP (buttons))
 		{
-			jump(map1, &mario, DIR_RIGHT, 1);
-			jumpFlag = 1;
+			if (tmpBtn == 1) {
+				jump(map1, &mario, DIR_LEFT, 1); //up
+				for (i = 0; i < 1000000; i++) {}
+				jump(map1, &mario, DIR_LEFT, 0); //down
+			} else if (tmpBtn == 0) {
+				jump(map1, &mario, DIR_RIGHT, 1);  //up
+				for (i = 0; i < 1000000; i++) {}
+				jump(map1, &mario, DIR_RIGHT, 0);  //down
+			}
+			tmpUp = 1;
 		}
-
-		jumpFlag = 0;
 
 		map_update();
 

@@ -1,14 +1,14 @@
-C:\ra127-2014\lprs2\projekat\super_mario\battle_city_design\implementation\battle_city.ngc 1496138779
-C:/ra127-2014/lprs2/projekat/super_mario/battle_city_design/implementation/battle_city_io_periph_wrapper.ngc 1496138753
-C:/ra127-2014/lprs2/projekat/super_mario/battle_city_design/implementation/battle_city_proc_sys_reset_0_wrapper.ngc 1496138675
-C:/ra127-2014/lprs2/projekat/super_mario/battle_city_design/implementation/battle_city_clock_generator_0_wrapper.ngc 1496138763
-C:/ra127-2014/lprs2/projekat/super_mario/battle_city_design/implementation/battle_city_battle_city_periph_0_wrapper.ngc 1496138747
-C:/ra127-2014/lprs2/projekat/super_mario/battle_city_design/implementation/battle_city_microblaze_0_ilmb_wrapper.ngc 1496138756
-C:/ra127-2014/lprs2/projekat/super_mario/battle_city_design/implementation/battle_city_microblaze_0_dlmb_wrapper.ngc 1496138758
-C:/ra127-2014/lprs2/projekat/super_mario/battle_city_design/implementation/battle_city_axi4lite_0_wrapper.ngc 1496138766
-C:/ra127-2014/lprs2/projekat/super_mario/battle_city_design/implementation/battle_city_microblaze_0_wrapper.ngc 1496138761
-C:/ra127-2014/lprs2/projekat/super_mario/battle_city_design/implementation/battle_city_microblaze_0_i_bram_ctrl_wrapper.ngc 1496138683
-C:/ra127-2014/lprs2/projekat/super_mario/battle_city_design/implementation/battle_city_microblaze_0_d_bram_ctrl_wrapper.ngc 1496138691
-C:/ra127-2014/lprs2/projekat/super_mario/battle_city_design/implementation/battle_city_debug_module_wrapper.ngc 1496138725
-C:/ra127-2014/lprs2/projekat/super_mario/battle_city_design/implementation/battle_city_microblaze_0_bram_block_wrapper.ngc 1496138697
+C:\ra127-2014\super_mario\battle_city_design\implementation\battle_city.ngc 1496324580
+C:/ra127-2014/super_mario/battle_city_design/implementation/battle_city_io_periph_wrapper.ngc 1496324554
+C:/ra127-2014/super_mario/battle_city_design/implementation/battle_city_proc_sys_reset_0_wrapper.ngc 1496324471
+C:/ra127-2014/super_mario/battle_city_design/implementation/battle_city_clock_generator_0_wrapper.ngc 1496324565
+C:/ra127-2014/super_mario/battle_city_design/implementation/battle_city_battle_city_periph_0_wrapper.ngc 1496324547
+C:/ra127-2014/super_mario/battle_city_design/implementation/battle_city_microblaze_0_ilmb_wrapper.ngc 1496324557
+C:/ra127-2014/super_mario/battle_city_design/implementation/battle_city_microblaze_0_dlmb_wrapper.ngc 1496324559
+C:/ra127-2014/super_mario/battle_city_design/implementation/battle_city_axi4lite_0_wrapper.ngc 1496324567
+C:/ra127-2014/super_mario/battle_city_design/implementation/battle_city_microblaze_0_wrapper.ngc 1496324562
+C:/ra127-2014/super_mario/battle_city_design/implementation/battle_city_microblaze_0_i_bram_ctrl_wrapper.ngc 1496324479
+C:/ra127-2014/super_mario/battle_city_design/implementation/battle_city_microblaze_0_d_bram_ctrl_wrapper.ngc 1496324488
+C:/ra127-2014/super_mario/battle_city_design/implementation/battle_city_debug_module_wrapper.ngc 1496324523
+C:/ra127-2014/super_mario/battle_city_design/implementation/battle_city_microblaze_0_bram_block_wrapper.ngc 1496324493
 OK
