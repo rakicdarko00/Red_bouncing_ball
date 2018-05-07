@@ -67,7 +67,7 @@ typedef enum {
 } bool_t;
 
 typedef enum {
-	DIR_LEFT, DIR_RIGHT, DIR_UP, DIR_DOWN, DIR_STILL, DIR_UP_LEFT, DIR_UP_RIGHT
+	DIR_LEFT, DIR_RIGHT, DIR_UP, DIR_DOWN, DIR_STILL
 } direction_t;
 
 typedef struct {
@@ -307,7 +307,7 @@ static bool_t mario_move(unsigned char * map, characters * mario,
 		//blok
 		if (dir == DIR_LEFT) {
 			if (x > MAP_X * 16) {
-			x++;
+				x++;
 			}
 		} else if (dir == DIR_RIGHT) {
 			x--;

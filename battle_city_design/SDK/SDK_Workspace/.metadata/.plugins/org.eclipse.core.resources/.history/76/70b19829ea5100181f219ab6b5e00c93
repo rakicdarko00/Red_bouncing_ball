@@ -162,15 +162,15 @@ static void map_update(characters * mario) {
 	int x, y;
 	long int addr;
 
-	if (mario->x >= 330) {
+	if (mario->x >= 640) {
 		if (udario_u_blok <= 0) {
 			map_move++;
 		}
 		if (mario->x == 2560) {
 			map_move = 2520;
 		}
-	}
-
+	//}
+	//map_move+=640;
 	for (y = 0; y < MAP_HEIGHT; y++) {
 		for (x = 0; x < MAP_WIDTH; x++) {
 			addr = XPAR_BATTLE_CITY_PERIPH_0_BASEADDR
@@ -199,6 +199,7 @@ static void map_update(characters * mario) {
 				break;
 			}
 		}
+	}
 	}
 }
 
@@ -305,26 +306,26 @@ static bool_t mario_move(unsigned char * map, characters * mario,
 	break;
 	case 2: {
 		//blok
-		if (dir == DIR_LEFT) {
+		/*if (dir == DIR_LEFT) {
 			if (x > MAP_X * 16) {
-			x++;
+				x++;
 			}
 		} else if (dir == DIR_RIGHT) {
 			x--;
-		}
+		}*/
 		udario_u_blok = 1;
 	}
 		break;
 	case 3: {
 		//cigla
 
-		if (dir == DIR_LEFT) {
+		/*if (dir == DIR_LEFT) {
 			if (x > MAP_X * 16) {
 				x++;
 			}
 		} else if (dir == DIR_RIGHT) {
 			x--;
-		}
+		}*/
 		udario_u_blok = 1;
 	}
 		break;

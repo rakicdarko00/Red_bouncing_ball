@@ -307,7 +307,7 @@ static bool_t mario_move(unsigned char * map, characters * mario,
 		//blok
 		if (dir == DIR_LEFT) {
 			if (x > MAP_X * 16) {
-			x++;
+				x++;
 			}
 		} else if (dir == DIR_RIGHT) {
 			x--;

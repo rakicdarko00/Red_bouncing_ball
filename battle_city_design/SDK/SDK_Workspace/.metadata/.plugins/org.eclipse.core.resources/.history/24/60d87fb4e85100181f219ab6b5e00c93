@@ -305,26 +305,26 @@ static bool_t mario_move(unsigned char * map, characters * mario,
 	break;
 	case 2: {
 		//blok
-		if (dir == DIR_LEFT) {
+		/*if (dir == DIR_LEFT) {
 			if (x > MAP_X * 16) {
-			x++;
+				x++;
 			}
 		} else if (dir == DIR_RIGHT) {
 			x--;
-		}
+		}*/
 		udario_u_blok = 1;
 	}
 		break;
 	case 3: {
 		//cigla
 
-		if (dir == DIR_LEFT) {
+		/*if (dir == DIR_LEFT) {
 			if (x > MAP_X * 16) {
 				x++;
 			}
 		} else if (dir == DIR_RIGHT) {
 			x--;
-		}
+		}*/
 		udario_u_blok = 1;
 	}
 		break;
