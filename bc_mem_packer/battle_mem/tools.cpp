@@ -113,7 +113,7 @@ void process_images( const char * dir, FILE * mem_file, FILE * def_file, unsigne
     WIN32_FIND_DATA find_data;
     HANDLE          find;
 
-    sprintf( search_dir, ( type == IMG_16x16 ) ? "%s\\8x8\\*.bmp" : "%s\\16x16\\*.bmp", dir );
+    sprintf( search_dir, ( type == IMG_16x16 ) ? "%s\\16x16\\%s" : "IMG_8x8_%s", dir,"*.bmp" );
 
     if( !( find = FindFirstFile( search_dir, &find_data ) ) ) {
         printf( "FindFirstFile failed.\n" );
@@ -122,14 +122,14 @@ void process_images( const char * dir, FILE * mem_file, FILE * def_file, unsigne
 
     do {
         if( !( find_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) ) {
-            sprintf( file_path, ( type == IMG_16x16 ) ? "%s\\8x8\\%s" : "%s\\16x16\\%s", dir, find_data.cFileName );
+            sprintf( file_path, ( type == IMG_16x16 ) ? "%s\\16x16\\%s" : "IMG_8x8_%s", dir, find_data.cFileName );
 
             if( !( img = load_bitmap( file_path ) ) ) {
                 printf( "Failed to open: %s\n", file_path );
                 continue;
             }
 
-            sprintf( def_name, ( type == IMG_16x16 ) ? "IMG_8x8_%s" : "IMG_16x16_%s", find_data.cFileName );
+            sprintf( def_name, ( type == IMG_16x16 ) ? "IMG_16x18_%s" : "IMG_8x8_%s", find_data.cFileName );
 
             // Remove .bmp extension
             def_name[ strlen( def_name ) - 4 ] = '\0';
