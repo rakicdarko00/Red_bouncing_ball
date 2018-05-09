@@ -55,6 +55,8 @@
 #define BASE_REG_L						0
 #define BASE_REG_H	                    1
 
+#define MAX_JUMP	                    70
+
 int lives = 0;
 int score = 0;
 int mapPart = 1;
@@ -62,6 +64,10 @@ int udario_glavom_skok = 0;
 int map_move = 0;
 int brojac = 0;
 int udario_u_blok = 0;
+int nivo = 1;
+int start_jump = 0;
+int start_fall = 0;
+int jump_cnt = 0;
 
 typedef enum {
 	b_false, b_true
@@ -163,14 +169,16 @@ static void map_update(characters * mario) {
 	int x, y;
 	long int addr;
 
-	if (mario->x >= 330) {
-		if (udario_u_blok <= 0) {
-			map_move++;
+	if (mario->x >= 620 && nivo==1) {
+			nivo=2;
+			if (udario_u_blok <= 0) {
+				map_move+=620;
+				//chhar_spawn(mario);
+			}
+			if (mario->x == 2560) {
+				map_move = 2520;
+			}
 		}
-		if (mario->x == 2560) {
-			map_move = 2520;
-		}
-	}
 
 	for (y = 0; y < MAP_HEIGHT; y++) {
 		for (x = 0; x < MAP_WIDTH; x++) {
@@ -238,7 +246,7 @@ static bool_t mario_move(unsigned char * map, characters * mario,
 
 	if (dir == DIR_LEFT) {
 			if (x > MAP_X * 16) {
-				obstackle = obstackles_detection(x, y, mapPart, map, 2);
+				obstackle = obstackles_detection(x, y, mapPart, map, 2, &start_jump, &start_fall, &jump_cnt);
 
 										switch (obstackle) {
 											case 0:{
@@ -267,7 +275,7 @@ static bool_t mario_move(unsigned char * map, characters * mario,
 	}
 	} else if (dir == DIR_RIGHT) {
 
-		obstackle = obstackles_detection(x, y, mapPart, map, 1);
+		obstackle = obstackles_detection(x, y, mapPart, map, 1, &start_jump, &start_fall, &jump_cnt);
 
 						switch (obstackle) {
 							case 0:{
@@ -309,7 +317,7 @@ static bool_t mario_move(unsigned char * map, characters * mario,
 						(mario->y << 16) | mario->x);
 				for (j = 0; j < 45000; j++) {
 				}
-				obstackle = obstackles_detection(x, y, mapPart, map, 3);
+				obstackle = obstackles_detection(x, y, mapPart, map, 3, &start_jump, &start_fall, &jump_cnt);
 
 				switch (obstackle) {
 					case 0:{
@@ -370,9 +378,9 @@ static bool_t mario_move(unsigned char * map, characters * mario,
 	Yy = y;
 
 	if (dir == DIR_LEFT) {
-		obstackle = obstackles_detection(x, y, mapPart, map, 2);
+		obstackle = obstackles_detection(x, y, mapPart, map, 2, &start_jump, &start_fall, &jump_cnt);
 	} else if (dir == DIR_RIGHT) {
-		obstackle = obstackles_detection(x, y, mapPart, map, 1);
+		obstackle = obstackles_detection(x, y, mapPart, map, 1, &start_jump, &start_fall, &jump_cnt);
 	}
 
 	roundX = floor(Xx / 16);
@@ -429,94 +437,7 @@ static bool_t mario_move(unsigned char * map, characters * mario,
 	return b_false;
 }
 
-/*int obstackles_detection(int x, int y, int deoMape, unsigned char * map,
-		int dir) {
-	unsigned char mario_position_right;
-	unsigned char mario_position_left;
-	unsigned char mario_position_up;
 
-	float Xx = x;
-	float Yy = y;
-
-	int roundX = 0;
-	int roundY = 0;
-
-	roundX = floor(Xx / 16);
-	roundY = floor(Yy / 16);
-
-	mario_position_right = map1[roundY + 1][roundX + 1];
-	mario_position_left = map1[roundY + 1][roundX];
-	mario_position_up = map1[roundY + 1][roundX];
-
-	if (dir == 1) {
-		switch (mario_position_right) {
-		case 0:
-			return 0;
-			break;
-		case 1:
-			return 1;
-			break;
-		case 2:
-			return 2;
-			break;
-		case 3:
-			return 3;
-			break;
-		case 4:
-			return 4;
-			break;
-		case 5:
-			return 5;
-			break;
-
-		}
-	} else if (dir == 2) {
-		switch (mario_position_left) {
-		case 0:
-			return 0;
-			break;
-		case 1:
-			return 1;
-			break;
-		case 2:
-			return 2;
-			break;
-		case 3:
-			return 3;
-			break;
-		case 4:
-			return 4;
-			break;
-		case 5:
-			return 5;
-			break;
-
-		}
-	} else if (dir == 3) {
-		switch (mario_position_up) {
-		case 0:
-			return 0;
-			break;
-		case 1:
-			return 1;
-			break;
-		case 2:
-			return 2;
-			break;
-		case 3:
-			return 3;
-			break;
-		case 4:
-			return 4;
-			break;
-		case 5:
-			return 5;
-			break;
-
-		}
-	}
-
-}*/
 
 void battle_city() {
 

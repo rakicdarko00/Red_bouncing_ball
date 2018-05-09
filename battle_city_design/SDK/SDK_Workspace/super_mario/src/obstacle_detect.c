@@ -1,12 +1,12 @@
-/*
+ /*
  * obstacle_detect.c
  *
  *  Created on: 09.05.2018.
  *      Author: student
  */
 #include "obstacle_detect.h"
-#include "map.h"
 
+#include "map.h"
 
 int obstackles_detection(int x, int y, int deoMape, unsigned char * map,int dir, int* start_jump, int* start_fall, int* jump_cnt) {
 	unsigned char mario_position_right;
