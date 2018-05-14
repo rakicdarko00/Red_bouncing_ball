@@ -11,7 +11,7 @@
 //////////////////////////////////////////////////////////////////////////////
 // Tweaking paramerters.
 
-#define MAX_JUMP	                    70
+#define MAX_JUMP	                    95
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -73,9 +73,12 @@ int udario_glavom_skok = 0;
 int map_move = 0;
 int brojac = 0;
 int udario_u_blok = 0;
-int nivo = 1;
+int nivo = 0;
 int start_fall = 0;
 int jump_cnt = 0;
+int flag1 = 1;
+int lifes = 8;
+int won_flag = 0;
 
 typedef enum {
 	b_false, b_true
@@ -100,8 +103,8 @@ typedef struct {
 	unsigned int reg_h;
 } characters;
 
-characters mario = { 40,	                        // x
-		369,		                     // y
+characters mario = { 60,	                        // x
+		-200,		                     // y
 		DIR_RIGHT,              		// dir
 		IMG_16x16_mario,  			// type
 
@@ -177,19 +180,37 @@ static void chhar_spawn(characters * chhar) {
 }
 
 static void map_update(characters * mario) {
-	int x, y;
+	int x, y, i, j;
 	long int addr;
 
-	if (mario->x >= 620 && nivo==1) {
-			nivo=2;
-			if (udario_u_blok <= 0) {
-				map_move+=620;
-				//chhar_spawn(mario);
-			}
-			if (mario->x == 2560) {
-				map_move = 2520;
+	if (mario->x >= 620 && nivo==0 && flag1==1) {
+			nivo=1;
+			flag1=0;
+				mario->y=369;
+				mario->x=60;
+				for(i=0;i<=30;i++){
+					for(j=0;j<=41;j++){
+						if(i==1 && j >30){
+							continue;
+						}
+						map1[i][j]=map2[i][j];
+					}
+				}
+		}
+
+	if(lifes==0){
+		mario->y=-1;
+		mario->x=-1;
+		for(i=0;i<=30;i++){
+			for(j=0;j<=41;j++){
+				if(i==1 && j >30){
+						continue;
+				}
+
+				map1[i][j]=map_game_over[i][j];
 			}
 		}
+	}
 
 	for (y = 0; y < MAP_HEIGHT; y++) {
 		for (x = 0; x < MAP_WIDTH; x++) {
@@ -241,8 +262,9 @@ void obstacle_detection( characters* ch, bool have_obstacle[9], u8 jump_cnt) {
 		have_obstacle[i]=false;
 	}
 
-	u8 roundX = ch->x >> 4;
-	u8 roundY = ch->y >> 4;
+
+	u8 roundX = (ch->x) >> 4;
+	u8 roundY = (ch->y) >> 4;
 
 	if (map1[roundY][roundX] != 0) {/////
 		have_obstacle[P_L] = true;
@@ -268,15 +290,6 @@ void obstacle_detection( characters* ch, bool have_obstacle[9], u8 jump_cnt) {
 	if (map1[roundY+1][roundX] != 0 || map1[roundY+1][roundX+1] != 0) {//////
 		have_obstacle[P_DL] = true;
 	}
-
-	//if(jump_cnt>0){
-	//	if (map1[roundY][roundX+1] != 0){
-	//		have_obstacle[P_UR] = true;
-	//	}
-	//	if (map1[roundY][roundX-1] != 0){
-	//		have_obstacle[P_UL] = true;
-	//	}
-	//}
 
 }
 /*
@@ -336,6 +349,101 @@ void obstacle_detection( characters* ch, bool have_obstacle[9], u8 jump_cnt, dir
 
 }*/
 
+void blowmind( characters* ch) {
+	u8 roundX = (ch->x) >> 4;
+	u8 roundY = (ch->y) >> 4;
+//NIVO 0
+	if(nivo==0){
+		if(ch->y==16*16){
+			map1[23][4]=5;
+			map1[23][5]=5;
+			map1[23][6]=5;
+			map1[23][7]=5;
+			map1[23][8]=5;
+			map1[23][9]=5;
+		}
+		if(ch->y>16*16 && ch->y<400 && ch->x>8*16){
+			map1[23][12]=5;
+			map1[23][13]=5;
+			map1[23][14]=5;
+		}
+
+		if(ch->x>25*16){
+			map1[19][25]=2;
+			map1[19][26]=2;
+			map1[19][27]=2;
+			map1[19][28]=2;
+			map1[19][29]=2;
+			map1[19][30]=2;
+			map1[19][31]=2;
+			map1[19][32]=2;
+			map1[19][33]=2;
+			map1[19][34]=2;
+			map1[19][35]=2;
+		}
+		if(ch->x>30*16){
+			map1[19][31]=0;
+			map1[19][32]=0;
+			map1[19][33]=0;
+			map1[19][34]=0;
+			map1[19][35]=0;
+		}
+	}
+
+	if(lifes>0 && nivo == 0 && won_flag==0){
+				if (map1[roundY][roundX] == 3 || map1[roundY][roundX] == 5 || map1[roundY+1][roundX+1] == 3 || map1[roundY+1][roundX+1] == 5 || map1[roundY+1][roundX] == 3 || map1[roundY+1][roundX] == 5 || map1[roundY][roundX+1+1/16] == 3 || map1[roundY][roundX+1+1/16] == 5) {/////
+					map1[1][39-lifes]=2;
+					map1[23][4]=0;
+					map1[23][5]=0;
+					map1[23][6]=0;
+					map1[23][7]=0;
+					map1[23][8]=0;
+					map1[23][9]=0;
+					map1[23][12]=0;
+					map1[23][13]=0;
+					map1[23][14]=0;
+					map1[19][25]=0;
+					map1[19][26]=0;
+					map1[19][27]=0;
+					map1[19][28]=0;
+					map1[19][29]=0;
+					map1[19][30]=0;
+					map1[19][31]=0;
+					map1[19][32]=0;
+					map1[19][33]=0;
+					map1[19][34]=0;
+					map1[19][35]=0;
+					lifes--;
+					ch->y=1;
+					ch->x=60;
+				}
+		}
+
+
+//NIVO 1
+	if(nivo==1){
+				if(ch->x>29*16){
+					map1[11][30]=5;
+				}
+			}
+
+	if(lifes>0 && nivo == 1 && won_flag==0){
+			if (map1[roundY][roundX] == 3 || map1[roundY][roundX] == 5 || map1[roundY+1][roundX+1] == 3 || map1[roundY+1][roundX+1] == 5 || map1[roundY+1][roundX] == 3 || map1[roundY+1][roundX] == 5 || map1[roundY][roundX+1+1/16] == 3 || map1[roundY][roundX+1+1/16] == 5) {/////
+				map1[1][39-lifes]=2;
+				map1[11][30]=0;
+				lifes--;
+				ch->y=369;
+				ch->x=60;
+			}
+	}
+
+	if(lifes == 0){
+		//TODO: call GAME OVER
+
+	}
+
+
+}
 
 static bool_t character_move(characters* ch, direction_t dir, bool up_pressed) {
 
@@ -348,6 +456,7 @@ static bool_t character_move(characters* ch, direction_t dir, bool up_pressed) {
 
 	//direction_t dir_obs=DIR_STILL;
 	obstacle_detection(ch, &have_obstacle, jump_cnt);
+	blowmind(ch);
 
 	// Jump FSM funkcija prelaza.
 	switch (jump_fsm) {
@@ -482,7 +591,7 @@ void battle_city() {
 
 		map_update(&mario);
 
-		for (i = 0; i < 55000; i++) {
+		for (i = 0; i < 45000; i++) {
 		}
 
 	}
