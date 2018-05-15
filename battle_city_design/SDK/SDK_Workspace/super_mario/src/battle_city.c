@@ -23,11 +23,14 @@
 
 // ***** 16x16 IMAGES *****
 #define IMG_16x16_cigle			0x00FF //2
-#define IMG_16x16_coin			0x013F //5
+#define IMG_16x16_SpikeUp    	0x013F //5
 #define IMG_16x16_crno			0x017F //0
-#define IMG_16x16_enemi1		0x01BF //4
-#define IMG_16x16_mario			0x01FF //1
-#define IMG_16x16_plavacigla	0x023F //3
+#define IMG_16x16_Lifes		    0x01BF //4
+#define IMG_16x16_Char			0x01FF //1
+#define IMG_16x16_SpikeLeft	    0x023F //3
+#define IMG_16x16_SpikeDown	    0x153F //6
+#define IMG_16x16_SpikeRight	0x1580 //7
+
 // ***** MAP *****
 
 #define MAP_BASE_ADDRESS			639 // MAP_OFFSET in battle_city.vhd
@@ -104,9 +107,9 @@ typedef struct {
 } characters;
 
 characters mario = { 60,	                        // x
-		-200,		                     // y
+		-100,		                     // y
 		DIR_RIGHT,              		// dir
-		IMG_16x16_mario,  			// type
+		IMG_16x16_Char,  			// type
 
 		b_false,                		// destroyed
 
@@ -117,7 +120,7 @@ characters mario = { 60,	                        // x
 characters enemie1 = { 331,						// x
 		431,						// y
 		DIR_LEFT,              		// dir
-		IMG_16x16_enemi1,  		// type
+		IMG_16x16_Lifes,  		// type
 
 		b_false,                		// destroyed
 
@@ -128,7 +131,7 @@ characters enemie1 = { 331,						// x
 characters enemie2 = { 450,						// x
 		431,						// y
 		DIR_LEFT,              		// dir
-		IMG_16x16_enemi1,  		// type
+		IMG_16x16_Lifes,  		// type
 
 		b_false,                		// destroyed
 
@@ -139,7 +142,7 @@ characters enemie2 = { 450,						// x
 characters enemie3 = { 330,						// x
 		272,						// y
 		DIR_LEFT,              		// dir
-		IMG_16x16_enemi1,  		// type
+		IMG_16x16_Lifes,  		// type
 
 		b_false,                		// destroyed
 
@@ -150,14 +153,33 @@ characters enemie3 = { 330,						// x
 characters enemie4 = { 635,						// x
 		431,						// y
 		DIR_LEFT,              		// dir
-		IMG_16x16_enemi1,  		// type
+		IMG_16x16_Lifes,  		// type
 
 		b_false,                		// destroyed
 
 		TANK_AI_REG_L4,            		// reg_l
 		TANK_AI_REG_H4             		// reg_h
 		};
+characters enemie5 = { 400,						// x
+		300,						// y
+		DIR_LEFT,              		// dir
+		IMG_16x16_Lifes,  		// type
 
+		b_false,                		// destroyed
+
+		TANK_AI_REG_L5,            		// reg_l
+		TANK_AI_REG_H5             		// reg_h
+		};
+characters enemie6 = { 200,						// x
+		100,						// y
+		DIR_LEFT,              		// dir
+		IMG_16x16_Lifes,  		// type
+
+		b_false,                		// destroyed
+
+		TANK_AI_REG_L6,            		// reg_l
+		TANK_AI_REG_H6             		// reg_h
+		};
 unsigned int rand_lfsr113(void) {
 	static unsigned int z1 = 12345, z2 = 12345;
 	unsigned int b;
@@ -221,19 +243,25 @@ static void map_update(characters * mario) {
 				Xil_Out32(addr, IMG_16x16_crno);
 				break;
 			case 1:
-				Xil_Out32(addr, IMG_16x16_mario);
+				Xil_Out32(addr, IMG_16x16_Char);
 				break;
 			case 2:
 				Xil_Out32(addr, IMG_16x16_cigle);
 				break;
 			case 3:
-				Xil_Out32(addr, IMG_16x16_plavacigla);
+				Xil_Out32(addr, IMG_16x16_SpikeLeft);
 				break;
 			case 4:
-				Xil_Out32(addr, IMG_16x16_enemi1);
+				Xil_Out32(addr, IMG_16x16_Lifes);
 				break;
 			case 5:
-				Xil_Out32(addr, IMG_16x16_coin);
+				Xil_Out32(addr, IMG_16x16_SpikeUp);
+				break;
+			case 6:
+				Xil_Out32(addr, IMG_16x16_SpikeDown);
+				break;
+			case 7:
+				Xil_Out32(addr, IMG_16x16_SpikeRight);
 				break;
 			default:
 				Xil_Out32(addr, IMG_16x16_crno);
@@ -352,6 +380,8 @@ void obstacle_detection( characters* ch, bool have_obstacle[9], u8 jump_cnt, dir
 void blowmind( characters* ch) {
 	u8 roundX = (ch->x) >> 4;
 	u8 roundY = (ch->y) >> 4;
+	static int flag_1_spike=0;
+
 //NIVO 0
 	if(nivo==0){
 		if(ch->y==16*16){
@@ -369,6 +399,8 @@ void blowmind( characters* ch) {
 		}
 
 		if(ch->x>25*16){
+			map1[19][23]=2;
+			map1[19][24]=2;
 			map1[19][25]=2;
 			map1[19][26]=2;
 			map1[19][27]=2;
@@ -388,35 +420,39 @@ void blowmind( characters* ch) {
 			map1[19][34]=0;
 			map1[19][35]=0;
 		}
-	}
 
-	if(lifes>0 && nivo == 0 && won_flag==0){
-				if (map1[roundY][roundX] == 3 || map1[roundY][roundX] == 5 || map1[roundY+1][roundX+1] == 3 || map1[roundY+1][roundX+1] == 5 || map1[roundY+1][roundX] == 3 || map1[roundY+1][roundX] == 5 || map1[roundY][roundX+1+1/16] == 3 || map1[roundY][roundX+1+1/16] == 5) {/////
-					map1[1][39-lifes]=2;
-					map1[23][4]=0;
-					map1[23][5]=0;
-					map1[23][6]=0;
-					map1[23][7]=0;
-					map1[23][8]=0;
-					map1[23][9]=0;
-					map1[23][12]=0;
-					map1[23][13]=0;
-					map1[23][14]=0;
-					map1[19][25]=0;
-					map1[19][26]=0;
-					map1[19][27]=0;
-					map1[19][28]=0;
-					map1[19][29]=0;
-					map1[19][30]=0;
-					map1[19][31]=0;
-					map1[19][32]=0;
-					map1[19][33]=0;
-					map1[19][34]=0;
-					map1[19][35]=0;
-					lifes--;
-					ch->y=1;
-					ch->x=60;
-				}
+		if(lifes>0 && won_flag==0){
+						if (map1[roundY][roundX] == 3 || map1[roundY][roundX] == 5 || map1[roundY+1][roundX+1] == 3 || map1[roundY+1][roundX+1] == 5 || map1[roundY+1][roundX] == 3 || map1[roundY+1][roundX] == 5 || map1[roundY][roundX+1+1/16] == 3 || map1[roundY][roundX+1+1/16] == 5) {/////
+							map1[1][39-lifes]=2;
+							map1[23][4]=0;
+							map1[23][5]=0;
+							map1[23][6]=0;
+							map1[23][7]=0;
+							map1[23][8]=0;
+							map1[23][9]=0;
+							map1[23][12]=0;
+							map1[23][13]=0;
+							map1[23][14]=0;
+							map1[19][23]=0;
+							map1[19][24]=0;
+							map1[19][25]=0;
+							map1[19][26]=0;
+							map1[19][27]=0;
+							map1[19][28]=0;
+							map1[19][29]=0;
+							map1[19][30]=0;
+							map1[19][31]=0;
+							map1[19][32]=0;
+							map1[19][33]=0;
+							map1[19][34]=0;
+							map1[19][35]=0;
+							lifes--;
+							ch->y=1;
+							ch->x=60;
+						}
+			}
+
+
 		}
 
 
@@ -424,17 +460,66 @@ void blowmind( characters* ch) {
 	if(nivo==1){
 				if(ch->x>29*16){
 					map1[11][30]=5;
+					flag_1_spike=1;
 				}
+
+				if(ch->x<29*16 && flag_1_spike==1){
+					map1[14][26]=5;
+				}
+
+				if(ch->x>36*16){
+					map1[12][38]=5;
+				}
+
+				if(ch->x>24*16 && ch->y>17*16){
+					map1[20][26]=2;
+					map1[20][27]=2;
+					map1[20][28]=2;
+					map1[19][28]=2;
+					map1[19][28]=2;
+					map1[19][29]=2;
+					map1[19][30]=2;
+					map1[19][31]=2;
+					map1[18][31]=2;
+					map1[18][32]=2;
+					map1[18][33]=2;
+					map1[17][33]=2;
+					map1[16][33]=2;
+					map1[15][33]=2;
+					map1[14][33]=2;
+					map1[13][33]=2;
+				}
+
+				if(lifes>0 && won_flag==0){
+							if (map1[roundY][roundX] == 3 || map1[roundY][roundX] == 5 || map1[roundY+1][roundX+1] == 3 || map1[roundY+1][roundX+1] == 5 || map1[roundY+1][roundX] == 3 || map1[roundY+1][roundX] == 5 || map1[roundY][roundX+1+1/16] == 3 || map1[roundY][roundX+1+1/16] == 5) {/////
+								map1[1][39-lifes]=2;
+								map1[11][30]=0;
+								map1[14][26]=0;
+								map1[12][38]=0;
+								map1[20][26]=0;
+								map1[20][27]=0;
+								map1[20][28]=0;
+								map1[19][28]=0;
+								map1[19][28]=0;
+								map1[19][29]=0;
+								map1[19][30]=0;
+								map1[19][31]=0;
+								map1[18][31]=0;
+								map1[18][32]=0;
+								map1[18][33]=3;
+								map1[17][33]=3;
+								map1[16][33]=3;
+								map1[15][33]=3;
+								map1[14][33]=3;
+								map1[13][33]=3;
+								flag_1_spike=0;
+								lifes--;
+								ch->y=369;
+								ch->x=60;
+							}
 			}
 
-	if(lifes>0 && nivo == 1 && won_flag==0){
-			if (map1[roundY][roundX] == 3 || map1[roundY][roundX] == 5 || map1[roundY+1][roundX+1] == 3 || map1[roundY+1][roundX+1] == 5 || map1[roundY+1][roundX] == 3 || map1[roundY+1][roundX] == 5 || map1[roundY][roundX+1+1/16] == 3 || map1[roundY][roundX+1+1/16] == 5) {/////
-				map1[1][39-lifes]=2;
-				map1[11][30]=0;
-				lifes--;
-				ch->y=369;
-				ch->x=60;
-			}
+
 	}
 
 	if(lifes == 0){
@@ -508,7 +593,6 @@ static bool_t character_move(characters* ch, direction_t dir, bool up_pressed) {
 		jump_cnt = 0;
 		break;
 	}
-
 
 	// Falling.
 

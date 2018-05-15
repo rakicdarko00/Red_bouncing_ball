@@ -6,7 +6,7 @@
 @REM #
 @REM # Command line for ngdbuild
 @REM #
-ngdbuild -p xc6slx45fgg676-2 -nt timestamp -bm battle_city.bmm "C:/Users/student/Desktop/TrapAdventureNEDIRAJ/Trap_Adventure/battle_city_design/implementation/battle_city.ngc" -uc battle_city.ucf battle_city.ngd 
+ngdbuild -p xc6slx45fgg676-2 -nt timestamp -bm battle_city.bmm "C:/Users/student/Desktop/TrapAdv/Trap_Adventure/battle_city_design/implementation/battle_city.ngc" -uc battle_city.ucf battle_city.ngd 
 
 @REM #
 @REM # Command line for map
