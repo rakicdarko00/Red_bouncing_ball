@@ -12,6 +12,7 @@
 // Tweaking paramerters.
 
 #define MAX_JUMP	                    95
+#define STEP	                        16
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -24,12 +25,14 @@
 // ***** 16x16 IMAGES *****
 #define IMG_16x16_cigle			0x00FF //2
 #define IMG_16x16_SpikeUp    	0x013F //5
-#define IMG_16x16_crno			0x017F //0
+#define IMG_16x16_Black			0x017F //0
 #define IMG_16x16_Lifes		    0x01BF //4
 #define IMG_16x16_Char			0x01FF //1
 #define IMG_16x16_SpikeLeft	    0x023F //3
 #define IMG_16x16_SpikeDown	    0x153F //6
 #define IMG_16x16_SpikeRight	0x1580 //7
+#define IMG_16x16_Char_move  	0x15C0 //8
+
 
 // ***** MAP *****
 
@@ -80,8 +83,11 @@ int nivo = 0;
 int start_fall = 0;
 int jump_cnt = 0;
 int flag1 = 1;
-int lifes = 8;
+int flag2 = 1;
+int flag3 = 1;
+int lifes = 20;
 int won_flag = 0;
+int char_move_cnt = 0;
 
 typedef enum {
 	b_false, b_true
@@ -107,8 +113,8 @@ typedef struct {
 } characters;
 
 characters mario = { 60,	                        // x
-		-100,		                     // y
-		DIR_RIGHT,              		// dir
+		-30,		                     // y
+		DIR_RIGHT, // dir
 		IMG_16x16_Char,  			// type
 
 		b_false,                		// destroyed
@@ -117,69 +123,7 @@ characters mario = { 60,	                        // x
 		TANK1_REG_H             		// reg_h
 		};
 
-characters enemie1 = { 331,						// x
-		431,						// y
-		DIR_LEFT,              		// dir
-		IMG_16x16_Lifes,  		// type
 
-		b_false,                		// destroyed
-
-		TANK_AI_REG_L,            		// reg_l
-		TANK_AI_REG_H             		// reg_h
-		};
-
-characters enemie2 = { 450,						// x
-		431,						// y
-		DIR_LEFT,              		// dir
-		IMG_16x16_Lifes,  		// type
-
-		b_false,                		// destroyed
-
-		TANK_AI_REG_L2,            		// reg_l
-		TANK_AI_REG_H2             		// reg_h
-		};
-
-characters enemie3 = { 330,						// x
-		272,						// y
-		DIR_LEFT,              		// dir
-		IMG_16x16_Lifes,  		// type
-
-		b_false,                		// destroyed
-
-		TANK_AI_REG_L3,            		// reg_l
-		TANK_AI_REG_H3             		// reg_h
-		};
-
-characters enemie4 = { 635,						// x
-		431,						// y
-		DIR_LEFT,              		// dir
-		IMG_16x16_Lifes,  		// type
-
-		b_false,                		// destroyed
-
-		TANK_AI_REG_L4,            		// reg_l
-		TANK_AI_REG_H4             		// reg_h
-		};
-characters enemie5 = { 400,						// x
-		300,						// y
-		DIR_LEFT,              		// dir
-		IMG_16x16_Lifes,  		// type
-
-		b_false,                		// destroyed
-
-		TANK_AI_REG_L5,            		// reg_l
-		TANK_AI_REG_H5             		// reg_h
-		};
-characters enemie6 = { 200,						// x
-		100,						// y
-		DIR_LEFT,              		// dir
-		IMG_16x16_Lifes,  		// type
-
-		b_false,                		// destroyed
-
-		TANK_AI_REG_L6,            		// reg_l
-		TANK_AI_REG_H6             		// reg_h
-		};
 unsigned int rand_lfsr113(void) {
 	static unsigned int z1 = 12345, z2 = 12345;
 	unsigned int b;
@@ -201,18 +145,18 @@ static void chhar_spawn(characters * chhar) {
 			(chhar->y << 16) | chhar->x);
 }
 
-static void map_update(characters * mario) {
+static void map_update(characters * ch) {
 	int x, y, i, j;
 	long int addr;
 
-	if (mario->x >= 620 && nivo==0 && flag1==1) {
+	if (ch->x >= 620 && nivo==0 && flag1==1) {
 			nivo=1;
 			flag1=0;
-				mario->y=369;
-				mario->x=60;
+				ch->y=369;
+				ch->x=60;
 				for(i=0;i<=30;i++){
 					for(j=0;j<=41;j++){
-						if(i==1 && j >30){
+						if(i==1 && j >15){
 							continue;
 						}
 						map1[i][j]=map2[i][j];
@@ -220,15 +164,52 @@ static void map_update(characters * mario) {
 				}
 		}
 
-	if(lifes==0){
-		mario->y=-1;
-		mario->x=-1;
-		for(i=0;i<=30;i++){
-			for(j=0;j<=41;j++){
-				if(i==1 && j >30){
-						continue;
+	if (ch->x >= 620 && nivo==1 && flag2==1) {
+					nivo=2;
+					flag2=0;
+						ch->y=9*16;
+						ch->x=60;
+						for(i=0;i<=30;i++){
+							for(j=0;j<=41;j++){
+								if(i==1 && j >15){
+									continue;
+								}
+								map1[i][j]=map3[i][j];
+							}
+						}
 				}
 
+	if (ch->x >= 620 && nivo==2 && flag3==1) {
+				nivo=3;
+				flag3=0;
+					ch->y=12*16;
+					ch->x=60;
+					for(i=0;i<=30;i++){
+						for(j=0;j<=41;j++){
+							if(i==1 && j >15
+									){
+								continue;
+							}
+							map1[i][j]=map4[i][j];
+						}
+					}
+			}
+
+	if (ch->x >= 620 && nivo==3 && lifes>0) {
+				ch->y=-1;
+				ch->x=-1;
+				for(i=0;i<=30;i++){
+					for(j=0;j<=41;j++){
+						map1[i][j]=map_win[i][j];
+					}
+				}
+				}
+
+	if(lifes==0){
+		ch->y=-1;
+		ch->x=-1;
+		for(i=0;i<=30;i++){
+			for(j=0;j<=41;j++){
 				map1[i][j]=map_game_over[i][j];
 			}
 		}
@@ -240,7 +221,7 @@ static void map_update(characters * mario) {
 					+ 4 * (MAP_BASE_ADDRESS + y * MAP_WIDTH + x);
 			switch (map1[y][x + map_move]) {
 			case 0:
-				Xil_Out32(addr, IMG_16x16_crno);
+				Xil_Out32(addr, IMG_16x16_Black);
 				break;
 			case 1:
 				Xil_Out32(addr, IMG_16x16_Char);
@@ -263,8 +244,11 @@ static void map_update(characters * mario) {
 			case 7:
 				Xil_Out32(addr, IMG_16x16_SpikeRight);
 				break;
+			case 8:
+				Xil_Out32(addr, IMG_16x16_Char_move);
+				break;
 			default:
-				Xil_Out32(addr, IMG_16x16_crno);
+				Xil_Out32(addr, IMG_16x16_Black);
 				break;
 			}
 		}
@@ -320,69 +304,100 @@ void obstacle_detection( characters* ch, bool have_obstacle[9], u8 jump_cnt) {
 	}
 
 }
-/*
-void obstacle_detection( characters* ch, bool have_obstacle[9], u8 jump_cnt, direction_t dir ) {
-	for(int i=0;i<9;i++){
-		have_obstacle[i]=false;
-	}
 
-	u8 roundX = ch->x >> 4;
-	u8 roundY = ch->y >> 4;
-
-	if (map1[roundY][roundX] != 0 && dir == DIR_LEFT) {/////
-		have_obstacle[P_L] = true;
-		ch->x= ((ch->x)+1);
-	}
-	if (map1[roundY][roundX] != 0 && dir == DIR_RIGHT) {/////
-		have_obstacle[P_R] = true;
-		ch->x= ((ch->x)-1);
-	}
-	if (map1[roundY][roundX] != 0 && dir == DIR_UP) {/////
-		have_obstacle[P_U] = true;
-		ch->y= ((ch->y)+1);
-	}
-	if (map1[roundY][roundX] != 0 && dir == DIR_DOWN) {/////
-		have_obstacle[P_D] = true;
-		ch->y= ((ch->y)-1);
-	}
-	if (map1[roundY][roundX] != 0 && dir == DIR_UR) {
-		have_obstacle[P_UR] = true;
-		ch->x= ((ch->x)-1);
-		ch->y= ((ch->y)+1);
-	}
-	if (map1[roundY][roundX] != 0 && dir == DIR_UL) {
-		have_obstacle[P_UL] = true;
-		ch->x= ((ch->x)+1);
-		ch->y= ((ch->y)+1);
-	}
-	if (map1[roundY][roundX] != 0 && dir == DIR_DR) {/////
-		have_obstacle[P_DR] = true;
-		ch->x= ((ch->x)-1);
-		ch->y= ((ch->y)-1);
-	}
-	if (map1[roundY][roundX] != 0 && dir == DIR_DL) {//////
-		have_obstacle[P_DL] = true;
-		ch->x= ((ch->x)+1);
-		ch->y= ((ch->y)-1);
-	}
-
-	//if(jump_cnt>0){
-	//	if (map1[roundY][roundX+1] != 0){
-	//		have_obstacle[P_UR] = true;
-	//	}
-	//	if (map1[roundY][roundX-1] != 0){
-	//		have_obstacle[P_UL] = true;
-	//	}
-	//}
-
-}*/
-
-void blowmind( characters* ch) {
+bool warning_detect(characters* ch){
+	bool ret=false;
 	u8 roundX = (ch->x) >> 4;
 	u8 roundY = (ch->y) >> 4;
-	static int flag_1_spike=0;
 
-//NIVO 0
+	ret=map1[roundY][roundX] == 3;
+	if(ret){
+		return true;
+	}
+	ret=map1[roundY][roundX] == 5;
+	if(ret){
+			return true;
+		}
+	ret=map1[roundY][roundX] == 6;
+		if(ret){
+			return true;
+		}
+	ret=map1[roundY][roundX] == 7;
+		if(ret){
+				return true;
+		}
+
+	ret=map1[roundY+1][roundX+1] == 3;
+	if(ret){
+			return true;
+		}
+	ret=map1[roundY+1][roundX+1] == 5;
+	if(ret){
+			return true;
+		}
+	ret=map1[roundY+1][roundX+1] == 6;
+		if(ret){
+				return true;
+			}
+	ret=map1[roundY+1][roundX+1] == 7;
+	if(ret){
+			return true;
+		}
+
+
+	ret=map1[roundY+1][roundX] == 3;
+	if(ret){
+			return true;
+		}
+	ret=map1[roundY+1][roundX] == 5;
+	if(ret){
+			return true;
+		}
+	ret=map1[roundY+1][roundX] == 6;
+	if(ret){
+			return true;
+		}
+	ret=map1[roundY+1][roundX] == 7;
+	if(ret){
+			return true;
+		}
+
+
+	ret=map1[roundY][roundX+1+1/16] == 3;
+	if(ret){
+			return true;
+		}
+	ret=map1[roundY][roundX+1+1/16] == 5;
+	if(ret){
+			return true;
+		}
+	ret=map1[roundY][roundX+1+1/16] == 6;
+		if(ret){
+				return true;
+			}
+		ret=map1[roundY][roundX+1+1/16] == 7;
+		if(ret){
+				return true;
+			}
+
+	return ret;
+}
+
+void blowmind( characters* ch) {
+	//u8 roundX = (ch->x) >> 4;
+	//u8 roundY = (ch->y) >> 4;
+	static int flag_1_spike1=0;
+	static int flag_1_spike2=0;
+	static int flag_2_switch=0;
+	static int i,j;
+	static int flag_4_1=0;
+	static int flag_4_2=0;
+	static int flag_4_3=0;
+	static int flag_4_4=0;
+	static int flag_4_5=0;
+	static int flag_4_6=0;
+
+//LEVEL 0
 	if(nivo==0){
 		if(ch->y==16*16){
 			map1[23][4]=5;
@@ -413,7 +428,7 @@ void blowmind( characters* ch) {
 			map1[19][34]=2;
 			map1[19][35]=2;
 		}
-		if(ch->x>30*16){
+		if(ch->x>29*16){
 			map1[19][31]=0;
 			map1[19][32]=0;
 			map1[19][33]=0;
@@ -422,7 +437,7 @@ void blowmind( characters* ch) {
 		}
 
 		if(lifes>0 && won_flag==0){
-						if (map1[roundY][roundX] == 3 || map1[roundY][roundX] == 5 || map1[roundY+1][roundX+1] == 3 || map1[roundY+1][roundX+1] == 5 || map1[roundY+1][roundX] == 3 || map1[roundY+1][roundX] == 5 || map1[roundY][roundX+1+1/16] == 3 || map1[roundY][roundX+1+1/16] == 5) {/////
+						if (warning_detect(ch)) {/////
 							map1[1][39-lifes]=2;
 							map1[23][4]=0;
 							map1[23][5]=0;
@@ -456,22 +471,23 @@ void blowmind( characters* ch) {
 		}
 
 
-//NIVO 1
+//LEVEL 1
 	if(nivo==1){
 				if(ch->x>29*16){
 					map1[11][30]=5;
-					flag_1_spike=1;
+					flag_1_spike1=1;
 				}
 
-				if(ch->x<29*16 && flag_1_spike==1){
+				if(ch->x<29*16 && flag_1_spike1==1){
 					map1[14][26]=5;
+					flag_1_spike2=1;
 				}
 
 				if(ch->x>36*16){
 					map1[12][38]=5;
 				}
 
-				if(ch->x>24*16 && ch->y>17*16){
+				if(ch->x>24*16 && ch->y>17*16 && flag_1_spike2==1){
 					map1[20][26]=2;
 					map1[20][27]=2;
 					map1[20][28]=2;
@@ -491,7 +507,7 @@ void blowmind( characters* ch) {
 				}
 
 				if(lifes>0 && won_flag==0){
-							if (map1[roundY][roundX] == 3 || map1[roundY][roundX] == 5 || map1[roundY+1][roundX+1] == 3 || map1[roundY+1][roundX+1] == 5 || map1[roundY+1][roundX] == 3 || map1[roundY+1][roundX] == 5 || map1[roundY][roundX+1+1/16] == 3 || map1[roundY][roundX+1+1/16] == 5) {/////
+							if (warning_detect(ch)) {/////
 								map1[1][39-lifes]=2;
 								map1[11][30]=0;
 								map1[14][26]=0;
@@ -512,7 +528,8 @@ void blowmind( characters* ch) {
 								map1[15][33]=3;
 								map1[14][33]=3;
 								map1[13][33]=3;
-								flag_1_spike=0;
+								flag_1_spike1=0;
+								flag_1_spike2=0;
 								lifes--;
 								ch->y=369;
 								ch->x=60;
@@ -520,6 +537,181 @@ void blowmind( characters* ch) {
 			}
 
 
+	}
+
+//LEVEL 2
+
+	if(nivo==2){
+			if(ch->x>7*16){
+
+				map1[12][5]=7;
+				map1[12][6]=0;
+				map1[12][7]=0;
+				map1[12][8]=0;
+	     		map1[12][9]=0;
+				map1[12][10]=3;
+
+				map1[13][5]=7;
+				map1[13][6]=0;
+				map1[13][7]=0;
+				map1[13][8]=0;
+				map1[13][9]=0;
+				map1[13][10]=3;
+
+				map1[14][5]=7;
+				map1[14][6]=0;
+				map1[14][7]=0;
+				map1[14][8]=0;
+				map1[14][9]=0;
+				map1[14][10]=3;
+
+				map1[15][5]=7;
+				map1[15][6]=0;
+				map1[15][7]=0;
+				map1[15][8]=0;
+				map1[15][9]=0;
+				map1[15][10]=3;
+
+				map1[16][5]=2;
+				map1[16][6]=5;
+				map1[16][7]=5;
+				map1[16][8]=5;
+				map1[16][9]=5;
+				map1[16][10]=2;
+			}
+					if(ch->x>12*16){
+					map1[11][13]=5;
+					map1[11][14]=5;
+					map1[11][15]=5;
+					}
+					if(ch->x>21*16 && ch->y>12*16){
+						map1[17][22]=5;
+						map1[17][23]=5;
+					}
+						if(ch->x>35*16){
+							map1[2][39]=2;
+							map1[3][39]=2;
+							map1[4][39]=2;
+							map1[5][39]=2;
+							map1[6][39]=2;
+							map1[7][39]=2;
+							map1[8][39]=2;
+							map1[9][39]=2;
+							map1[10][39]=2;
+							map1[11][39]=2;
+
+							map1[2][38]=3;
+							map1[3][38]=3;
+							map1[4][38]=3;
+							map1[5][38]=3;
+							map1[6][38]=3;
+							map1[7][38]=3;
+							map1[8][38]=3;
+							map1[9][38]=3;
+							map1[10][38]=3;
+							map1[11][38]=3;
+						}
+						if(ch->x>35*16 && ch->y<6*16){
+							flag_2_switch=1;
+							map1[5][35]=2;
+							map1[29][25]=0;
+							map1[29][26]=0;
+							map1[29][27]=0;
+						}
+						if(ch->x>24*16 && ch->x<28*16 && ch->y>28*16 && flag_2_switch==1){
+
+							ch->x = 36*16;
+							ch->y = 28*16;
+
+							map1[28][39] = 0;
+							map1[28][38] = 0;
+							map1[28][37] = 0;
+							map1[28][36] = 0;
+
+							map1[27][39] = 0;
+							map1[27][38] = 0;
+							map1[27][37] = 0;
+							map1[27][36] = 0;
+
+							map1[26][39] = 0;
+							map1[26][38] = 0;
+							map1[26][37] = 0;
+							map1[26][36] = 0;
+
+							map1[25][39] = 0;
+							map1[25][38] = 0;
+							map1[25][37] = 0;
+							map1[25][36] = 0;
+						}
+
+						if(ch->x>37*16 && ch->y>24*16 && ch->y<29*16){
+							map1[28][39] = 5;
+						}
+
+
+
+
+			if(lifes>0 && won_flag==0){
+				if (warning_detect(ch)) {/////
+					map1[1][39-lifes]=2;
+					lifes--;
+					for(i=0;i<=30;i++){
+						for(j=0;j<=41;j++){
+							if(i==1 && j >30){
+								continue;
+							}
+							map1[i][j]=map3[i][j];
+						}
+					}
+					ch->y=9*16;
+					ch->x=60;
+				}
+			}
+		}
+
+//LEVEL 3
+
+	if(nivo==3){
+		if(ch->x>11*16 && ch->x<13*16 && ch->y>16*16){
+			map1[17][12]=2;
+			flag_4_1=1;
+		}
+
+		if(ch->x>15*16 && ch->x<17*16 && ch->y>25*16 && flag_4_1 == 1){
+			map1[26][16]=2;
+			flag_4_2=1;
+		}
+
+		if(flag_4_3 == 1){
+			map1[22][23]=2;
+			flag_4_4=1;
+		}
+		if(ch->x>22*16 && ch->x<24*16 && ch->y>25*16 && flag_4_2 == 1){
+			map1[26][23]=2;
+			flag_4_3=1;
+		}
+
+		if(ch->x>26*16 && ch->x<28*16 && ch->y>17*16 && flag_4_4 == 1){
+			map1[18][27]=2;
+		}
+
+		if(lifes>0 && won_flag==0){
+			if (warning_detect(ch)) {/////
+				map1[1][39-lifes]=2;
+				lifes--;
+				flag_4_1=0;
+				flag_4_2=0;
+				flag_4_3=0;
+				flag_4_4=0;
+				map1[17][12]=0;
+				map1[26][16]=0;
+				map1[22][23]=0;
+				map1[26][23]=0;
+				map1[18][27]=0;
+				ch->y=12*16;
+				ch->x=60;
+			}
+		}
 	}
 
 	if(lifes == 0){
@@ -658,16 +850,34 @@ void battle_city() {
 	chhar_spawn(&mario);
 
 	while (1) {
+		char_move_cnt++;
+
+		if (char_move_cnt==STEP){
+			char_move_cnt=0;
+		}
 
 		buttons = XIo_In32( XPAR_IO_PERIPH_BASEADDR );
 
 		direction_t d = DIR_STILL;
 		if (BTN_LEFT(buttons)) {
 			d = DIR_LEFT;
+			if (char_move_cnt==0){
+					mario.type=IMG_16x16_Char;
+					chhar_spawn(&mario);
+				}else if (char_move_cnt==(STEP/2)){
+					mario.type=IMG_16x16_Char_move;
+					chhar_spawn(&mario);
+				}
 		} else if (BTN_RIGHT(buttons)) {
 			d = DIR_RIGHT;
+			if (char_move_cnt==0){
+					mario.type=IMG_16x16_Char;
+					chhar_spawn(&mario);
+				}else if (char_move_cnt==(STEP/2)){
+					mario.type=IMG_16x16_Char_move;
+					chhar_spawn(&mario);
+				}
 		}
-
 
 		bool up_pressed = BTN_UP(buttons);
 
