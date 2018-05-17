@@ -704,7 +704,7 @@ void blowmind( characters* ch) {
 			map1[18][27]=2;
 		}
 
-		if(ch->x<35*16 && ch->x>32*16 && ch->y<11*16){
+		if(ch->x<35*16 && ch->x>33*16 && ch->y<11*16){
 					map1[3][35]=2;
 					map1[4][35]=2;
 					map1[5][35]=2;
