@@ -724,7 +724,7 @@ void blowmind( characters* ch) {
 					map1[9][34]=3;
 					map1[10][34]=3;
 					map1[11][34]=3;
-					map1[12][34]=3;
+
 				}
 
 		if(ch->x>36*16)
