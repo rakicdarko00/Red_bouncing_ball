@@ -23,17 +23,18 @@
  */
 
 // ***** 16x16 IMAGES *****
-#define IMG_16x16_cigle			0x00FF //2
-#define IMG_16x16_SpikeUp    	0x013F //5
-#define IMG_16x16_Black			0x017F //0
+#define IMG_16x16_cigle			0x00FF //2 255 Ovo je nas red block
+#define IMG_16x16_SpikeUp    	0x013F //5 319
+#define IMG_16x16_Black			0x017F //0 383 Pozadina nasa - nebo
 #define IMG_16x16_Lifes		    0x01BF //4
-#define IMG_16x16_Char_right	0x01FF //1
-#define IMG_16x16_SpikeLeft	    0x023F //3
-#define IMG_16x16_SpikeDown	    0x153F //6
-#define IMG_16x16_SpikeRight	0x1580 //7
-#define IMG_16x16_Char_move_right  	0x16A4 //8
-#define IMG_16x16_Char_move_left  	0x1624 //8
-#define IMG_16x16_Char_left     	0x1664 //8
+#define IMG_16x16_SpikeLeft	    0x023F //3 575
+#define IMG_16x16_SpikeDown	    0x153F //6 5439
+#define IMG_16x16_SpikeRight	0x1580 //7 5504
+
+#define IMG_16x16_Char_right		0x01FF //1
+#define IMG_16x16_Char_move_right  	0x01FF //1
+#define IMG_16x16_Char_move_left  	0x01FF //1
+#define IMG_16x16_Char_left     	0x01FF //1
 
 
 
