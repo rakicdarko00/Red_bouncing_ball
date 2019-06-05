@@ -24,9 +24,10 @@
 
 // ***** 16x16 IMAGES *****
 #define IMG_16x16_cigle			0x00FF //2 255 Ovo je nas red block
+
 #define IMG_16x16_SpikeUp    	0x013F //5 319
 #define IMG_16x16_Black			0x017F //0 383 Pozadina nasa - nebo
-#define IMG_16x16_Lifes		    0x01BF //4
+#define IMG_16x16_Lifes		    0x01FF //4
 #define IMG_16x16_SpikeLeft	    0x023F //3 575
 #define IMG_16x16_SpikeDown	    0x153F //6 5439
 #define IMG_16x16_SpikeRight	0x1580 //7 5504
@@ -89,7 +90,7 @@ int jump_cnt = 0;
 int flag1 = 1;
 int flag2 = 1;
 int flag3 = 1;
-int lifes = 20;
+int lifes = 100;
 int won_flag = 0;
 int char_move_cnt = 0;
 
@@ -116,8 +117,8 @@ typedef struct {
 	unsigned int reg_h;
 } characters;
 
-characters mario = { 60,	                        // x
-		-30,		                     // y
+characters mario = { 80,	                        // x
+		250,		                     // y
 		DIR_RIGHT, // dir
 		IMG_16x16_Char_right,  			// type
 
@@ -128,17 +129,7 @@ characters mario = { 60,	                        // x
 		};
 
 
-unsigned int rand_lfsr113(void) {
-	static unsigned int z1 = 12345, z2 = 12345;
-	unsigned int b;
 
-	b = ((z1 << 6) ^ z1) >> 13;
-	z1 = ((z1 & 4294967294U) << 18) ^ b;
-	b = ((z2 << 2) ^ z2) >> 27;
-	z2 = ((z2 & 4294967288U) << 2) ^ b;
-
-	return (z1 ^ z2);
-}
 
 static void chhar_spawn(characters * chhar) {
 	Xil_Out32(
@@ -217,6 +208,7 @@ static void map_update(characters * ch) {
 				map1[i][j]=map_game_over[i][j];
 			}
 		}
+
 	}
 
 	for (y = 0; y < MAP_HEIGHT; y++) {
@@ -409,10 +401,17 @@ void blowmind( characters* ch) {
 
 //LEVEL 0
 	if(nivo==0){
+		if(ch->x<16){
+							for(i=0;i<30;i++){
+								map1[i][0]=7;
+							}
+
+						}
+/*
 		if(ch->y==16*16){
-			map1[23][4]=5;
-			map1[23][5]=5;
-			map1[23][6]=5;
+			map1[23][4]=2;
+			map1[23][5]=2;
+			map1[23][6]=2;
 			map1[23][7]=5;
 			map1[23][8]=5;
 			map1[23][9]=5;
@@ -430,6 +429,7 @@ void blowmind( characters* ch) {
 			map1[19][26]=2;
 			map1[19][27]=2;
 			map1[19][28]=2;
+
 			map1[19][29]=2;
 			map1[19][30]=2;
 			map1[19][31]=2;
@@ -445,7 +445,7 @@ void blowmind( characters* ch) {
 			map1[19][34]=0;
 			map1[19][35]=0;
 		}
-
+*/
 		if(lifes>0 && won_flag==0){
 						if (warning_detect(ch)) {/////
 							map1[1][39-lifes]=2;
@@ -472,8 +472,8 @@ void blowmind( characters* ch) {
 							map1[19][34]=0;
 							map1[19][35]=0;
 							lifes--;
-							ch->y=1;
-							ch->x=60;
+							ch->y=250;
+							ch->x=80;
 						}
 			}
 
@@ -483,6 +483,14 @@ void blowmind( characters* ch) {
 
 //LEVEL 1
 	if(nivo==1){
+
+				if(ch->x<3*16){
+					for(i=0;i<30;i++){
+						map1[i][1]=7;
+					}
+
+				}
+
 				if(ch->x>29*16){
 					map1[11][30]=5;
 					flag_1_spike1=1;
@@ -896,7 +904,7 @@ void battle_city() {
 	int i;/*, change = 0, jumpFlag = 0;*/
 	/*int block;*/
 
-	map_reset(map1);
+	map_reset(&map1);
 	map_update(&mario);
 
 	//chhar_spawn(&enemie1);
