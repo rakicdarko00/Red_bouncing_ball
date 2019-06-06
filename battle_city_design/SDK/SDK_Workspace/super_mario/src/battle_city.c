@@ -143,8 +143,8 @@ static void chhar_spawn(characters * chhar) {
 static void map_update(characters * ch) {
 	int x, y, i, j;
 	long int addr;
-
-	if (ch->x >= 620 && nivo==0 && flag1==1) {
+	//x 620
+	if (ch->x <= 620 && nivo==0 && flag1==1) {
 			nivo=1;
 			flag1=0;
 				ch->y=369;
@@ -550,43 +550,11 @@ void blowmind( characters* ch) {
 
 				if(ch->x<3*16){
 					for(i=0;i<30;i++){
-						map1[i][1]=7;
+						map1[i][0]=7;
 					}
 
 				}
 
-				if(ch->x>29*16){
-					map1[11][30]=5;
-					flag_1_spike1=1;
-				}
-
-				if(ch->x<29*16 && flag_1_spike1==1){
-					map1[14][26]=5;
-					flag_1_spike2=1;
-				}
-
-				if(ch->x>36*16){
-					map1[12][38]=5;
-				}
-
-				if(ch->x>24*16 && ch->y>17*16 && flag_1_spike2==1){
-					map1[20][26]=2;
-					map1[20][27]=2;
-					map1[20][28]=2;
-					map1[19][28]=2;
-					map1[19][28]=2;
-					map1[19][29]=2;
-					map1[19][30]=2;
-					map1[19][31]=2;
-					map1[18][31]=2;
-					map1[18][32]=2;
-					map1[18][33]=2;
-					map1[17][33]=2;
-					map1[16][33]=2;
-					map1[15][33]=2;
-					map1[14][33]=2;
-					map1[13][33]=2;
-				}
 
 				if(lifes>0 && won_flag==0){
 							if (warning_detect(ch)) {/////
@@ -624,7 +592,7 @@ void blowmind( characters* ch) {
 //LEVEL 2
 
 	if(nivo==2){
-			if(ch->x>7*16){
+			/*if(ch->x>7*16){
 
 				map1[12][5]=7;
 				map1[12][6]=0;
@@ -682,16 +650,7 @@ void blowmind( characters* ch) {
 							map1[10][39]=2;
 							map1[11][39]=2;
 
-							map1[2][38]=3;
-							map1[3][38]=3;
-							map1[4][38]=3;
-							map1[5][38]=3;
-							map1[6][38]=3;
-							map1[7][38]=3;
-							map1[8][38]=3;
-							map1[9][38]=3;
-							map1[10][38]=3;
-							map1[11][38]=3;
+
 						}
 						if(ch->x>35*16 && ch->y<6*16){
 							flag_2_switch=1;
@@ -724,11 +683,9 @@ void blowmind( characters* ch) {
 							map1[25][38] = 0;
 							map1[25][37] = 0;
 							map1[25][36] = 0;
-						}
+						}*/
 
-						if(ch->x>37*16 && ch->y>24*16 && ch->y<29*16){
-							map1[28][39] = 5;
-						}
+
 
 
 
