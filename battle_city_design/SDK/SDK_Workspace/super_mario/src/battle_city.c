@@ -11,7 +11,7 @@
 //////////////////////////////////////////////////////////////////////////////
 // Tweaking paramerters.
 
-#define MAX_JUMP	                    95
+#define MAX_JUMP	                    80
 #define STEP	                        16
 
 
@@ -388,6 +388,7 @@ bool warning_detect(characters* ch){
 void blowmind( characters* ch) {
 	//u8 roundX = (ch->x) >> 4;
 	//u8 roundY = (ch->y) >> 4;
+	static int flag_lvl_1=0;
 	static int flag_1_spike1=0;
 	static int flag_1_spike2=0;
 	static int flag_2_switch=0;
@@ -407,7 +408,70 @@ void blowmind( characters* ch) {
 							}
 
 						}
-/*
+		if(ch->y==10*16 ){
+			map1[10][8]=6;
+			map1[9][8]=2;
+			map1[11][5]=0;
+			map1[11][4]=0;
+			map1[11][3]=0;
+			map1[12][4]=0;
+
+
+		}
+
+		if(ch->x>13*16 && ch->y>8*16){
+
+
+			map1[27][13]=3;
+
+			map1[24][13]=3;
+
+			map1[21][13]=3;
+
+
+
+
+
+
+			map1[27][14]=2;
+
+			map1[24][14]=2;
+
+			map1[21][14]=2;
+
+
+		}
+		if(ch->x>20*16 && ch->x<21*16 && ch->y>20*16 && ch->y<30*16 ){
+			map1[6][6]=2;
+			flag_lvl_1=1;
+		}
+		if(flag_lvl_1==1){
+			ch->x=530;
+			ch->y=240;
+			map1[6][31]=7;
+			map1[7][31]=7;
+			map1[8][31]=7;
+			map1[9][31]=7;
+			map1[10][31]=7;
+			map1[11][31]=7;
+			map1[12][31]=7;
+			map1[13][31]=7;
+			map1[14][31]=7;
+
+			flag_lvl_1=0;
+
+
+		}
+
+
+		if(ch->x>550 && ch->x<560 ){
+			for(i=0;i<17;i++){
+				map1[i][38]=3;
+				map1[i][39]=2;
+
+			}
+		}
+/*11,6
 		if(ch->y==16*16){
 			map1[23][4]=2;
 			map1[23][5]=2;
@@ -472,8 +536,8 @@ void blowmind( characters* ch) {
 							map1[19][34]=0;
 							map1[19][35]=0;
 							lifes--;
-							ch->y=250;
-							ch->x=80;
+							ch->y=300;
+							ch->x=50;
 						}
 			}
 
@@ -786,12 +850,12 @@ void blowmind( characters* ch) {
 
 }
 
-static bool_t character_move(characters* ch, direction_t dir, bool up_pressed) {
+static bool_t character_move(characters* ch, direction_t dir) {
 
 	static jump_fsm_t jump_fsm = J_IDLE;
 	static u8 jump_cnt;
 
-
+	static bool up_pressed = true;
 	static bool have_obstacle[9];
 
 
@@ -807,6 +871,7 @@ static bool_t character_move(characters* ch, direction_t dir, bool up_pressed) {
 		}
 		break;
 	case J_GOING_UP:
+
 		if (jump_cnt == MAX_JUMP) {
 			jump_fsm = J_WAIT_UP_RELESE;
 		}
@@ -831,7 +896,7 @@ static bool_t character_move(characters* ch, direction_t dir, bool up_pressed) {
 
 		break;
 	case J_WAIT_UP_RELESE:
-		if (!up_pressed) {
+		if (up_pressed) {
 			jump_fsm = J_IDLE;
 		}
 		break;
@@ -945,7 +1010,7 @@ void battle_city() {
 
 		bool up_pressed = BTN_UP(buttons);
 
-		character_move(&mario, d, up_pressed);
+		character_move(&mario, d);
 
 		map_update(&mario);
 
