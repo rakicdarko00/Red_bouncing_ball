@@ -144,7 +144,7 @@ static void map_update(characters * ch) {
 	int x, y, i, j;
 	long int addr;
 	//x 620
-	if (ch->x <= 620 && nivo==0 && flag1==1) {
+	if (ch->x >= 620 && nivo==0 && flag1==1) {
 			nivo=1;
 			flag1=0;
 				ch->y=369;
@@ -445,6 +445,8 @@ void blowmind( characters* ch) {
 			map1[6][6]=2;
 			flag_lvl_1=1;
 		}
+
+		//siljci na kraju frejma
 		if(flag_lvl_1==1){
 			ch->x=530;
 			ch->y=240;
@@ -556,6 +558,29 @@ void blowmind( characters* ch) {
 				}
 
 
+				if(ch->x>17*16 && ch->x<20*16){
+					map1[21][18]=5;
+					map1[21][19]=5;
+				}
+
+				if(ch->x>10*16 && ch->x<15*16 && ch->y<16*16){
+					map1[13][13]=5;
+					map1[13][14]=5;
+				}
+
+				if(ch->x>17*16 && ch->x<20*16 && ch->y>17*16){
+					map1[19][23]=5;
+					map1[19][24]=5;
+				}
+
+
+				if(ch->x>18*16 && ch->x<23*16 && ch->y<10*16){
+					map1[8][23]=5;
+					map1[8][24]=5;
+				}
+
+
+
 				if(lifes>0 && won_flag==0){
 							if (warning_detect(ch)) {/////
 								map1[1][39-lifes]=2;
@@ -572,12 +597,12 @@ void blowmind( characters* ch) {
 								map1[19][31]=0;
 								map1[18][31]=0;
 								map1[18][32]=0;
-								map1[18][33]=3;
-								map1[17][33]=3;
-								map1[16][33]=3;
-								map1[15][33]=3;
-								map1[14][33]=3;
-								map1[13][33]=3;
+								map1[18][33]=0;
+								map1[17][33]=0;
+								map1[16][33]=0;
+								map1[15][33]=0;
+								map1[14][33]=0;
+								map1[13][33]=0;
 								flag_1_spike1=0;
 								flag_1_spike2=0;
 								lifes--;
@@ -592,7 +617,7 @@ void blowmind( characters* ch) {
 //LEVEL 2
 
 	if(nivo==2){
-			/*if(ch->x>7*16){
+/*			if(ch->x>7*16){
 
 				map1[12][5]=7;
 				map1[12][6]=0;
@@ -683,12 +708,41 @@ void blowmind( characters* ch) {
 							map1[25][38] = 0;
 							map1[25][37] = 0;
 							map1[25][36] = 0;
-						}*/
+						}
 
 
+*/
+
+			if(ch->x>23*16 && ch->x<26*16 && ch->y>17*16 && ch->y<19*16){
+				map1[17][24]=2;
+				flag_4_1 =1;
+			}
+
+			if(flag_4_1 == 1 && ch->x>25*16 && ch->x<28*16/* && ch->y>15*16 && ch->y<17*16*/){
+				map1[15][27]=2;
+				flag_4_2 = 1;
+			}
+
+			if(flag_4_2 == 1 && ch->x>27*16 && ch->x<30*16/* && ch->y>13*16 && ch->y<15*16*/){
+				map1[12][30]=2;
+				flag_4_3 = 1;
+			}
 
 
+			if(flag_4_3 == 1 && ch->x>34*16 && ch->x<36*16 && ch->y>5*16 && ch->y<9*16){
+				map1[4][34]=2;
+				flag_4_4=1;
+			}
 
+			if(flag_4_4 == 1){
+				for(int i=22; i<41; i++){
+					map1[22][i]=0;
+					map1[23][i]=0;
+					map1[24][i]=0;
+
+				}
+
+			}
 
 			if(lifes>0 && won_flag==0){
 				if (warning_detect(ch)) {/////
