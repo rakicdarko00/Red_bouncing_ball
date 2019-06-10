@@ -90,7 +90,7 @@ int jump_cnt = 0;
 int flag1 = 1;
 int flag2 = 1;
 int flag3 = 1;
-int lifes = 100;
+int lifes = 20;
 int won_flag = 0;
 int char_move_cnt = 0;
 
@@ -185,20 +185,12 @@ static void map_update(characters * ch) {
 									){
 								continue;
 							}
-							map1[i][j]=map4[i][j];
+							map1[i][j]=map_win[i][j];
 						}
 					}
 			}
 
-	if (ch->x >= 620 && nivo==3 && lifes>0) {
-				ch->y=-1;
-				ch->x=-1;
-				for(i=0;i<=30;i++){
-					for(j=0;j<=41;j++){
-						map1[i][j]=map_win[i][j];
-					}
-				}
-				}
+
 
 	if(lifes==0){
 		ch->y=-1;
@@ -514,29 +506,13 @@ void blowmind( characters* ch) {
 */
 		if(lifes>0 && won_flag==0){
 						if (warning_detect(ch)) {/////
-							map1[1][39-lifes]=2;
-							map1[23][4]=0;
-							map1[23][5]=0;
-							map1[23][6]=0;
-							map1[23][7]=0;
-							map1[23][8]=0;
-							map1[23][9]=0;
-							map1[23][12]=0;
-							map1[23][13]=0;
-							map1[23][14]=0;
-							map1[19][23]=0;
-							map1[19][24]=0;
-							map1[19][25]=0;
-							map1[19][26]=0;
-							map1[19][27]=0;
-							map1[19][28]=0;
-							map1[19][29]=0;
-							map1[19][30]=0;
-							map1[19][31]=0;
-							map1[19][32]=0;
-							map1[19][33]=0;
-							map1[19][34]=0;
-							map1[19][35]=0;
+
+							for(int i=0;i<20;i++){
+								if(lifes>19)
+								map1[1][i+21]=8;
+								else
+									map1[1][40-lifes]=0;
+							}
 							lifes--;
 							ch->y=300;
 							ch->x=50;
@@ -579,7 +555,27 @@ void blowmind( characters* ch) {
 					map1[8][24]=5;
 				}
 
+				if(ch->x<6*16 && ch->y<11*16){
+					map1[9][6]=0;
+					map1[7][4]=7;
+					map1[8][4]=7;
+					map1[9][4]=7;
+					map1[10][4]=7;
 
+
+				}
+
+				if(ch->x>35*16){
+					for(int i=3;i<18;i++){
+						map1[i][38]=3;
+					}
+					map1[5][36]=0;
+				}
+				if(ch->x>14*16){
+					for(int i=14;i<22;i++){
+						map1[i][15]=7;
+					}
+				}
 
 				if(lifes>0 && won_flag==0){
 							if (warning_detect(ch)) {/////
@@ -746,7 +742,12 @@ void blowmind( characters* ch) {
 
 			if(lifes>0 && won_flag==0){
 				if (warning_detect(ch)) {/////
-					map1[1][39-lifes]=2;
+					for(int i=0;i<20;i++){
+													if(lifes>19)
+													map1[1][i+lifes+1]=8;
+													else
+														map1[1][40-lifes]=0;
+												}
 					lifes--;
 					for(i=0;i<=30;i++){
 						for(j=0;j<=41;j++){
