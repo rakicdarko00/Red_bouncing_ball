@@ -117,7 +117,7 @@ typedef struct {
 	unsigned int reg_h;
 } characters;
 
-characters mario = { 80,	                        // x
+characters mario = { 50,	                        // x
 		250,		                     // y
 		DIR_RIGHT, // dir
 		IMG_16x16_Char_right,  			// type
@@ -816,7 +816,12 @@ void blowmind( characters* ch) {
 			map1[14][38]=5;
 		if(lifes>0 && won_flag==0){
 			if (warning_detect(ch)) {/////
-				map1[1][39-lifes]=2;
+				for(int i=0;i<20;i++){
+																	if(lifes>19)
+																	map1[1][i+lifes+1]=8;
+																	else
+																		map1[1][40-lifes]=0;
+																}
 				lifes--;
 				flag_4_1=0;
 				flag_4_2=0;
